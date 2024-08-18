@@ -1,0 +1,98 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+
+{% block title %}Sign Up{% endblock title %}
+
+{% block content %}
+
+<div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
+  <div class="container">
+    <div class="form-box">
+      <div class="form-tab">
+        <ul class="nav nav-pills nav-fill" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab"
+              aria-controls="signin-2" aria-selected="false">Sign Up</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+    <div class="auth_wrapper">
+    <form method="POST" class="auth_form">
+      {% csrf_token %}
+      <div class="field">
+        <label for="singin-email-2">Email address</label>
+        <div class="input-area">
+          {{ form.email }}
+          <i class="icon fas fa-envelope"></i>
+          {% if form.email.errors %}
+          <i class="error error-icon fas fa-exclamation-circle"></i>
+          {% endif %}
+        </div>
+        {% if form.email.errors %}
+        <div class="error error-txt">
+          <strong>{{ form.email.errors }}</strong>
+        </div>
+        {% endif %}
+      </div>
+      <div class="field">
+        <label for="singin-email-2">Username</label>
+        <div class="input-area">
+          {{ form.username }}
+          <i class="icon fas fa-user"></i>
+          {% if form.username.errors %}
+          <i class="error error-icon fas fa-exclamation-circle"></i>
+          {% endif %}
+        </div>
+        {% if form.username.errors %}
+        <div class="error error-txt">
+          <strong>{{ form.username.errors }}</strong>
+        </div>
+        {% endif %}
+      </div>
+      <div class="field">
+        <label for="singin-email-2">Password</label>
+        <div class="input-area">
+          {{ form.password1 }}
+          <i class="icon fas fa-lock"></i>
+          {% if form.password1.errors %}
+          <i class="error error-icon fas fa-exclamation-circle"></i>
+          {% endif %}
+        </div>
+        {% if form.password1.errors %}
+        <div class="error error-txt">
+          <strong>{{ form.password1.errors }}</strong>
+        </div>
+        {% endif %}
+      </div>
+      <div class="field">
+        <label for="singin-email-2">Confirm Password</label>
+        <div class="input-area">
+          {{ form.password2 }}
+          <i class="icon fas fa-lock"></i>
+          {% if form.password2.errors %}
+          <i class="error error-icon fas fa-exclamation-circle"></i>
+          {% endif %}
+        </div>
+        {% if form.password2.errors %}
+        <div class="error error-txt">
+          <strong>{{ form.password2.errors }}</strong>
+        </div>
+        {% endif %}
+      </div>
+      <button type="submit" class="btn btn-outline-primary-2">
+        <span>SIGN UP</span>
+        <i class="icon-long-arrow-right"></i>
+    </button>
+    </form>
+  <div class="sign-txt">Already have an account? <a href="{% url 'userauths:sign-in' %}">Sign in now</a></div>
+</div><!-- End .form-tab -->
+          </div>
+        </div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock content %}

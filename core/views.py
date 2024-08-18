@@ -11,7 +11,7 @@ from taggit.models import Tag
 
 def index(request):
 	products = Product.objects.filter(product_status='published', featured=True)
-
+	average_rating = ProductReview.objects.all()
 	special_offers = Product.objects.filter(product_status='published').annotate(
 		discount_percentage=ExpressionWrapper(
 			((F('old_price') - F('price')) / F('old_price')) * 100,
@@ -23,6 +23,7 @@ def index(request):
 
 	context = {
 		"products": products,
+		'average_rating': average_rating,
 		"special_offers": special_offers,
 		"oldest_products": oldest_products,
 	}
@@ -116,12 +117,18 @@ def ajax_add_review(request, pid):
 	user = request.user
 	image = user.image.url
 
-	review = ProductReview.objects.create(
-		user=user,
-		product=product,
-		review=request.POST['review'],
-		rating=request.POST['rating'],
-	)
+	if request.user.is_authenticated:
+		user_review_count = ProductReview.objects.filter(user=request.user, product=product).count() 
+
+		if user_review_count > 0:
+			make_review = False
+		else:
+			review = ProductReview.objects.create(
+			user=user,
+			product=product,
+			review=request.POST['review'],
+			rating=request.POST['rating'],
+		)
 	
 	context = {
 		'user': user.username,
@@ -132,7 +139,7 @@ def ajax_add_review(request, pid):
 
 	average_reviews = ProductReview.objects.filter(product=product).aggregate(rating=Avg('rating'))
 
-
+	
 	return JsonResponse(
 		{
 			'bool': True,
@@ -321,7 +328,8 @@ def remove_from_wishlist(request):
 	}
 	qs_json = serializers.serialize('json', wishlist)
 	data = render_to_string('core/async/wishlist-list.html', context)
-	return JsonResponse({'data': data, 'wishlist': qs_json})
+	wishlist_count = Wishlist.objects.filter(user=request.user).count()
+	return JsonResponse({'data': data, 'wishlist': qs_json, 'wishlist_count':wishlist_count})
 
 def contact(request):
 	return render(request, 'core/contact.html')
@@ -330,10 +338,14 @@ def ajax_contact_form(request):
 	name = request.GET['name']
 	email = request.GET['email']
 	message = request.GET['message']
-
+	phone = request.GET['message']
+	subject = request.GET['message']
+	
 	contact = ContactUs.objects.create(
 		name=name,		
-		email=email,		
+		email=email,	
+		phone=phone,
+		subject=subject,	
 		message=message,		
 	)
 

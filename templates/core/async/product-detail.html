@@ -1,0 +1,329 @@
+{% load multiply %}
+<div class="page-content">
+    <div class="container">
+        <div class="product-details-top">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="product-gallery">
+                        <figure class="product-main-image">
+                            <img id="product-zoom" src="{{ product.image.url }}" data-zoom-image="{{ product.image.url }}" alt="product image">
+
+                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                <i class="icon-arrows"></i>
+                            </a>
+                        </figure><!-- End .product-main-image -->
+
+                        <div id="product-zoom-gallery" class="product-image-gallery">
+                            <a class="product-gallery-item" href="#" data-image="assets/images/products/single/extended/1.jpg" data-zoom-image="assets/images/products/single/extended/1-big.jpg">
+                                <img src="{{ product.image.url }}" alt="product side">
+                            </a>
+                            {% for p in p_image %}
+                            <a class="product-gallery-item" href="#" data-zoom-image="">
+                                <img src="{{ p.images.url }}" alt="product side">
+                            </a>
+                            {% endfor %}
+                        </div><!-- End .product-image-gallery -->
+                    </div><!-- End .product-gallery -->
+                </div><!-- End .col-md-6 -->
+
+                <div class="col-md-6">
+                    <div class="product-details">
+                        <h1 class="product-title">{{ product.title }}</h1><!-- End .product-title -->
+
+                        <div class="ratings-container">
+                            <div class="ratings">
+                                <div class="ratings-val" style="width:{{ average_rating.rating|multiply:20 }}%;"></div>
+                            </div><!-- End .ratings -->
+                            <a class="ratings-text" href="#product-review-link" id="review-link">( {{ reviews.count }} Reviews )</a>
+                        </div><!-- End .rating-container -->
+
+                        <div class="product-price">
+                            ${{product.price}}
+                        </div><!-- End .product-price -->
+
+                        <div class="product-content">
+                            <p>{{product.description|truncatechars:150|safe}}</p>
+                        </div><!-- End .product-content -->
+
+
+                        <div class="details-filter-row details-row-size">
+                            <label for="qty">Qty:</label>
+                            <div class="product-details-quantity">
+                                <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                            </div><!-- End .product-details-quantity -->
+                        </div><!-- End .details-filter-row -->
+
+                        <div class="product-details-action">
+                            {% if product.stock_count %}
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                            {% else %}
+                            <a  class="btn disabled"><span>Out of Stock</span></a>
+                            {% endif %}
+                            <div class="details-action-wrapper">
+                                {% if request.user.is_authenticated %}
+                                <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ product.id }}" ><span>Add to Wishlist</span></a>
+                                {% else %}
+                                <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></span></a>
+                                {% endif %}
+                                
+                                <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a>
+                            </div><!-- End .details-action-wrapper -->
+                        </div><!-- End .product-details-action -->
+
+                        <div class="product-details-footer">
+                            <div class="product-cat">
+                                {% if product.tags.all %}
+                                <span>Tags:</span>
+                                <span>{% for tag in product.tags.all %}<a href="{% url 'core:tags' tag.slug %}" class="tag">#{{tag.name}}</a> {% endfor %}</span>
+                                {% endif %}
+                            </div><!-- End .product-cat -->
+
+                            <div class="social-icons social-icons-sm">
+                                <span class="social-label">Share:</span>
+                                <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                                <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                                <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                                <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                            </div>
+                        </div><!-- End .product-details-footer -->
+                    </div><!-- End .product-details -->
+                </div><!-- End .col-md-6 -->
+            </div><!-- End .row -->
+        </div><!-- End .product-details-top -->
+
+        <div class="product-details-tab">
+            <ul class="nav nav-pills justify-content-center" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews ({{reviews.count}})</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
+                    <div class="product-desc-content">
+                        <h3>Product Information</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
+                        <ul>
+                            <li>Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit. </li>
+                            <li>Vivamus finibus vel mauris ut vehicula.</li>
+                            <li>Nullam a magna porttitor, dictum risus nec, faucibus sapien.</li>
+                        </ul>
+
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. </p>
+                    </div><!-- End .product-desc-content -->
+                </div><!-- .End .tab-pane -->
+                <div class="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
+                    <div class="product-desc-content">
+                        <h6>Product Infomation</h6>
+                        <h6>About Vendor</h6>
+                        <p><strong>Vendor:</strong> {{product.vendor.title}}</p>
+                        <p><strong>Address:</strong> {{product.vendor.address}}</p>
+                        <p><strong>Contact:</strong> {{product.vendor.contact}}</p>
+                        <h6>About Product</h6>
+                        {% if product.mfd %}
+                        <p><strong>Manufacturing Date:</strong> {{product.mfd|date:"d M, Y"}}</p>
+                        {% endif %}
+                        {% if product.life %}
+                        <p><strong>Shelf Life:</strong> {{product.life}} Day{{product.life|pluralize}}</p>
+                        {% endif %}
+                    </div><!-- End .product-desc-content -->
+                </div><!-- .End .tab-pane -->
+                <div class="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
+                    <div class="product-desc-content">
+                        <h3>Delivery & returns</h3>
+                        <p>We deliver to over 100 countries around the world. For full details of the delivery options we offer, please view our <a href="#">Delivery information</a><br>
+                        We hope you’ll love every purchase, but if you ever need to return an item you can do so within a month of receipt. For full details of how to make a return, please view our <a href="#">Returns information</a></p>
+                    </div><!-- End .product-desc-content -->
+                </div><!-- .End .tab-pane -->
+                <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
+                    <div class="reviews">
+                        <h3>Product Reviews</h3>
+                        {% if average_rating.rating %}
+                            <h6>This product has {{average_rating.rating|floatformat:1}} out of 5.0 rate.</h6>               
+                        {% else %}
+                            <h6>This product has no reviews yet.</h6>
+                        {% endif %}
+
+                        {% for r in reviews %}
+                        <div class="review">
+                            <div class="row no-gutters">
+                                <div class="col-auto">
+                                    <h4><a>{{r.user.username}}</a></h4>
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width:{{ r.rating|multiply:20 }}%;"></div>
+                                        </div><!-- End .ratings -->
+                                    </div><!-- End .rating-container -->
+                                    <span class="review-date">{{r.date|date:"d M, Y"}}</span>
+                                </div><!-- End .col -->
+                                <div class="col">
+                                    <!-- <h4>Test title</h4> -->
+                                    <div class="review-content">
+                                        <p>{{r.review}}</p>
+                                    </div><!-- End .review-content -->
+
+                                </div><!-- End .col-auto -->
+                            </div><!-- End .row -->
+                           
+                        </div><!-- End .review -->
+                        {% endfor %}
+
+                    </div><!-- End .reviews -->
+                    <div class="reviews"> 
+                    {% if request.user.is_authenticated %}
+                    {% if make_review == True %}
+                    <h3>Add review</h3>
+                    <strong id="reviewRes"></strong>
+                    <form  action="{% url 'core:ajax-add-review' product.id %}" id="commentForm" method="POST">
+                        {% csrf_token %}
+                        <div>{{review_form.review}}</div>
+                        <div class="rating-review-submit">
+                            <div>{{review_form.rating}}</div>
+                            <button class="btn btn-outline-primary btn-square" type="submit">Submit review</button>  
+                        </div>           
+                    </form>
+                    {% endif %}
+                    {% else %}
+                     <p>To leave comments, you should be authenticated! Please create or log into your account.</p>
+                    {% endif %}
+                </div>
+                </div><!-- .End .tab-pane -->
+            </div><!-- End .tab-content -->
+        </div><!-- End .product-details-tab -->
+
+        <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+
+        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+            data-owl-options='{
+                "nav": false, 
+                "dots": true,
+                "margin": 20,
+                "loop": false,
+                "responsive": {
+                    "0": {
+                        "items":1
+                    },
+                    "480": {
+                        "items":2
+                    },
+                    "768": {
+                        "items":3
+                    },
+                    "992": {
+                        "items":4
+                    },
+                    "1200": {
+                        "items":4,
+                        "nav": true,
+                        "dots": false
+                    }
+                }
+            }'>
+
+            {% for p in products %}
+            {% if p.get_percentage > 0 %}
+            <div class="product product-7 text-center">
+                <figure class="product-media">
+                    <span class="product-label label-new">-{{p.get_percentage|floatformat:0}}%</span>
+                    <a href="{% url 'core:products-detail' p.pid %}">
+                        <img src="{{p.image.url}}" alt="Product image" class="product-image">
+                    </a>
+
+                    <div class="product-action-vertical">
+                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                    </div><!-- End .product-action-vertical -->
+
+                    <div class="product-action">
+                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                    </div><!-- End .product-action -->
+                </figure><!-- End .product-media -->
+
+                <div class="product-body">
+                    <div class="product-cat">
+                        <a href="#">Women</a>
+                    </div><!-- End .product-cat -->
+                    <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</h3><!-- End .product-title -->
+                    <div class="product-price">
+                        ${{product.price}}
+                    </div><!-- End .product-price -->
+                    <div class="ratings-container">
+                        <div class="ratings">
+                            <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                        </div><!-- End .ratings -->
+                        <span class="ratings-text">( 2 Reviews )</span>
+                    </div><!-- End .rating-container -->
+
+                    <div class="product-nav product-nav-thumbs">
+                        <a href="#" class="active">
+                            <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
+                        </a>
+                        <a href="#">
+                            <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
+                        </a>
+
+                        <a href="#">
+                            <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
+                        </a>
+                    </div><!-- End .product-nav -->
+                </div><!-- End .product-body -->
+            </div><!-- End .product -->
+            {% else %}
+            <div class="product product-7 text-center">
+                <figure class="product-media">
+                    <span class="product-label label-new">-{{p.get_percentage|floatformat:0}}%</span>
+                    <a href="{% url 'core:products-detail' p.pid %}">
+                        <img src="{{p.image.url}}" alt="Product image" class="product-image">
+                    </a>
+
+                    <div class="product-action-vertical">
+                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                    </div><!-- End .product-action-vertical -->
+
+                    <div class="product-action">
+                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                    </div><!-- End .product-action -->
+                </figure><!-- End .product-media -->
+
+                <div class="product-body">
+                    <div class="product-cat">
+                        <a href="#">Women</a>
+                    </div><!-- End .product-cat -->
+                    <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil skirt</a></h3><!-- End .product-title -->
+                    <div class="product-price">
+                        ${{product.price}}
+                    </div><!-- End .product-price -->
+                    <div class="ratings-container">
+                        <div class="ratings">
+                            <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                        </div><!-- End .ratings -->
+                        <span class="ratings-text">( 2 Reviews )</span>
+                    </div><!-- End .rating-container -->
+
+                    <div class="product-nav product-nav-thumbs">
+                        <a href="#" class="active">
+                            <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
+                        </a>
+                        <a href="#">
+                            <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
+                        </a>
+
+                        <a href="#">
+                            <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
+                        </a>
+                    </div><!-- End .product-nav -->
+                </div><!-- End .product-body -->
+            </div><!-- End .product -->
+            {% endif %}
+            {% endfor %}
+        </div><!-- End .owl-carousel -->
+    </div><!-- End .container -->
+</div><!-- End .page-content -->

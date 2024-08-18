@@ -4,365 +4,326 @@
 {% block title %}Products{% endblock title %}
 
 {% block content %}
-{% include 'partials/hero-section.html' %}
 
-<!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="{% static 'assets/img/breadcrumb.jpg' %}">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb__text">
-                    <h2>Products</h2>
-                    <div class="breadcrumb__option">
-                        <a href="{% url 'core:index' %}">Home</a>
-                        <span class="breadcrumb__separator"><i class="fa fa-angle-right"></i></span>
-                        <span>Products</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Breadcrumb Section End -->
+<main class="main">
+        	<div class="page-header text-center" style="background-image: url({% static './assets/images/page-header-bg.jpg' %})">
+        		<div class="container">
+        			<h1 class="page-title">List<span>Shop</span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'core:products-list' %}">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">List</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
 
-<!-- Product Section Begin -->
-<section class="product spad"> 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-5">
-                <div class="sidebar">
-                    <div class="sidebar__item">
-                        <h4>By Categories</h4>
-                        {% for c in categories %}
-                        <ul>
-                            <li>
-                                <div class="checkbox-wrapper-2">
-                                    <input type="checkbox" class="filter-checkbox ikxBAC" data-filter="category" id="checkBox1" value="{{ c.id }}">&nbsp;&nbsp;
-                                    {{c.title}}
-                                </div>
-                            </li>
-                        </ul>
-                        {% endfor %}
-                    </div>
-                    <div class="sidebar__item">
-                        <h4>Price</h4>
-                        <div class="price-range-wrap">
-                            <input type="range" name="" value="{{ min_max_price.price__max }}" id="range" min="{{ min_max_price.price__min }}" max="{{ min_max_price.price__max }}" oninput="max_price.value=this.value">
-                            <div class="price-container">
-                                <strong>${{ min_max_price.price__min|floatformat:2 }}</strong>
-                                <strong>${{ min_max_price.price__max|floatformat:2 }}</strong>
-                            </div>
-                            <input class="price-range-input" type="text" name="" value="{{ min_max_price.price__max|floatformat:2 }}" id="max_price" min="{{ min_max_price.price__min }}" max="{{ min_max_price.price__max }}" placeholder="Current Price" onkeyup="range.value=this.value">
-                            <button class="button-68" id="price-filter-btn" type="button"><strong>Filter By Price</strong></button>
-                            <!-- <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                data-min="10" data-max="540">
-                                <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
-                                <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                                <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
-                            </div> -->
-                            <!-- <div class="range-slider">
-                                <div class="price-input">
-                                    <input type="text" id="minamount">
-                                    <input type="text" id="maxamount">
-                                </div>
-                            </div> -->
-                        </div>
-                    </div>
-                    <div class="sidebar__item">
-                        <h4>By Vendors</h4>
-                        {% for v in vendors %}
-                        <ul>
-                            <li>
-                                <div class="checkbox-wrapper-2">
-                                    <input type="checkbox" class="filter-checkbox ikxBAC" data-filter="vendor" id="checkBox2" value="{{ v.id }}">&nbsp;&nbsp;
-                                    {{v.title}}
-                                </div>
-                            </li>
-                        </ul>
-                        {% endfor %}
-                    </div>
-                    <!-- <div class="sidebar__item sidebar__item__color--option">
-                        <h4>Colors</h4>
-                        <div class="sidebar__item__color sidebar__item__color--white">
-                            <label for="white">
-                                White
-                                <input type="radio" id="white">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--gray">
-                            <label for="gray">
-                                Gray
-                                <input type="radio" id="gray">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--red">
-                            <label for="red">
-                                Red
-                                <input type="radio" id="red">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--black">
-                            <label for="black">
-                                Black
-                                <input type="radio" id="black">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--blue">
-                            <label for="blue">
-                                Blue
-                                <input type="radio" id="blue">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--green">
-                            <label for="green">
-                                Green
-                                <input type="radio" id="green">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="sidebar__item">
-                        <h4>Popular Size</h4>
-                        <div class="sidebar__item__size">
-                            <label for="large">
-                                Large
-                                <input type="radio" id="large">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__size">
-                            <label for="medium">
-                                Medium
-                                <input type="radio" id="medium">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__size">
-                            <label for="small">
-                                Small
-                                <input type="radio" id="small">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__size">
-                            <label for="tiny">
-                                Tiny
-                                <input type="radio" id="tiny">
-                            </label>
-                        </div>
-                    </div> -->
-                    <div class="sidebar__item">
-                        <div class="latest-product__text">
-                            <h4>Latest Products</h4>
-                            <div class="latest-product__slider owl-carousel">
-                                <div class="latest-prdouct__slider__item">
-                                    {% for p in latest_products|slice:":3" %}
-                                    <a href="{% url 'core:products-detail' p.pid %}" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="{{p.image.url}}" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>{{p.title}}</h6>
+            <div class="page-content">
+                <div class="container">
+                	<div class="row">
+                		<div class="col-lg-9">
+                			<div class="toolbox">
+                				<div class="toolbox-left">
+                					<div class="toolbox-info">
+                						Showing <span>9 of 56</span> Products
+                					</div><!-- End .toolbox-info -->
+                				</div><!-- End .toolbox-left -->
 
-                                            {% if p.get_percentage > 0 %}
-                                            <span>${{p.price}}</span>
-                                            <span class="item__old__price">${{p.old_price}}</span>
+                				<div class="toolbox-right">
+                					<div class="toolbox-sort">
+                						<label for="sortby">Sort by:</label>
+                						<div class="select-custom">
+											<select name="sortby" id="sortby" class="form-control">
+												<option value="popularity" selected="selected">Most Popular</option>
+												<option value="rating">Most Rated</option>
+												<option value="date">Date</option>
+											</select>
+										</div>
+                					</div><!-- End .toolbox-sort -->
+                					<div class="toolbox-layout">
+                						<a href="category-list.html" class="btn-layout active">
+                							<svg width="16" height="10">
+                								<rect x="0" y="0" width="4" height="4" />
+                								<rect x="6" y="0" width="10" height="4" />
+                								<rect x="0" y="6" width="4" height="4" />
+                								<rect x="6" y="6" width="10" height="4" />
+                							</svg>
+                						</a>
 
-                                            {% else %}
+                						<a href="category-2cols.html" class="btn-layout">
+                							<svg width="10" height="10">
+                								<rect x="0" y="0" width="4" height="4" />
+                								<rect x="6" y="0" width="4" height="4" />
+                								<rect x="0" y="6" width="4" height="4" />
+                								<rect x="6" y="6" width="4" height="4" />
+                							</svg>
+                						</a>
 
-                                            <span>${{p.price}}</span>
-                                            
-                                            {% endif %}      
-                                        </div>
-                                    </a>
-                                    {% endfor %}
-                                </div>
-                                <div class="latest-prdouct__slider__item">
-                                    {% for p in latest_products|slice:"3:6" %}
-                                    <a href="{% url 'core:products-detail' p.pid %}" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="{{p.image.url}}" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>{{p.title}}</h6>
+                						<a href="category.html" class="btn-layout">
+                							<svg width="16" height="10">
+                								<rect x="0" y="0" width="4" height="4" />
+                								<rect x="6" y="0" width="4" height="4" />
+                								<rect x="12" y="0" width="4" height="4" />
+                								<rect x="0" y="6" width="4" height="4" />
+                								<rect x="6" y="6" width="4" height="4" />
+                								<rect x="12" y="6" width="4" height="4" />
+                							</svg>
+                						</a>
 
-                                            {% if p.get_percentage > 0 %}
-                                            <span>${{p.price}}</span>
-                                            <span class="item__old__price">${{p.old_price}}</span>
+                						<a href="category-4cols.html" class="btn-layout">
+                							<svg width="22" height="10">
+                								<rect x="0" y="0" width="4" height="4" />
+                								<rect x="6" y="0" width="4" height="4" />
+                								<rect x="12" y="0" width="4" height="4" />
+                								<rect x="18" y="0" width="4" height="4" />
+                								<rect x="0" y="6" width="4" height="4" />
+                								<rect x="6" y="6" width="4" height="4" />
+                								<rect x="12" y="6" width="4" height="4" />
+                								<rect x="18" y="6" width="4" height="4" />
+                							</svg>
+                						</a>
+                					</div><!-- End .toolbox-layout -->
+                				</div><!-- End .toolbox-right -->
+                			</div><!-- End .toolbox -->
 
-                                            {% else %}
+                            <div class="products mb-3" id="filtered-product">
+                                {% for p in products %}
+                                {% if p.get_percentage > 0 %}
+                                <div class="product product-list">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-3">
+                                            <figure class="product-media">
+                                                <span class="product-label label-new">-{{p.get_percentage|floatformat:0}}%</span>
+                                                <a href="{% url 'core:products-detail' p.pid %}">
+                                                    <img src="{{p.image.url}}" alt="Product image" class="product-image">
+                                                </a>
+                                            </figure><!-- End .product-media -->
+                                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-                                            <span>${{p.price}}</span>
-                                            
-                                            {% endif %}      
-                                        </div>
-                                    </a>
-                                    {% endfor %}
-                                </div>
-                                <div class="latest-prdouct__slider__item">
-                                    {% for p in latest_products|slice:"6:9" %}
-                                    <a href="{% url 'core:products-detail' p.pid %}" class="latest-product__item">
-                                        <div class="latest-product__item__pic">
-                                            <img src="{{p.image.url}}" alt="">
-                                        </div>
-                                        <div class="latest-product__item__text">
-                                            <h6>{{p.title}}</h6>
+                                        <div class="col-6 col-lg-3 order-lg-last">
+                                            <div class="product-list-action">
+                                                <div class="product-price">
+                                                    ${{p.price}}
+                                                </div><!-- End .product-price -->
+                                                <div class="ratings-container">
+                                                    <div class="ratings">
+                                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                                                    </div><!-- End .ratings -->
+                                                    <span class="ratings-text">( 2 Reviews )</span>
+                                                </div><!-- End .rating-container -->
 
-                                            {% if p.get_percentage > 0 %}
-                                            <span>${{p.price}}</span>
-                                            <span class="item__old__price">${{p.old_price}}</span>
+                                                <div class="product-action">
+                                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                                </div><!-- End .product-action -->
 
-                                            {% else %}
+                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            </div><!-- End .product-list-action -->
+                                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-                                            <span>${{p.price}}</span>
-                                            
-                                            {% endif %}      
-                                        </div>
-                                    </a>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-9 col-md-7">
-                <div class="product__discount">
-                    <div class="section-title product__discount__title">
-                        <h2>Sale Off</h2>
-                    </div>
-                    <div class="row">
-                        <div class="product__discount__slider owl-carousel">
+                                        <div class="col-lg-6">
+                                            <div class="product-body product-action-inner">
+                                                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                                <div class="product-cat">
+                                                    <a href="#">{{p.category.title}}</a>
+                                                </div><!-- End .product-cat -->
+                                                <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3><!-- End .product-title -->
 
-                            {% for p in products %}
-                            {% if p.get_percentage %}
+                                                <div class="product-content">
+                                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque </p>
+                                                </div><!-- End .product-content -->
+                                                
+                                                <img data-imgbigurl="{{ p.images.url }}"
+                                                    src="{{ p.images.url }}" alt="">
+                                                
+                                                <div class="product-nav product-nav-thumbs">
+                                                    {% for p in p_image %}
+                                                    <a href="#" class="active">
+                                                        <img data-imgbigurl="{{ p.images.url }}" src="{{ p.images.url }}" alt="product desc">
+                                                    </a>
+                                                    {% endfor %}
+                                                </div><!-- End .product-nav -->
+                                            </div><!-- End .product-body -->
+                                        </div><!-- End .col-lg-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .product -->
+                                {% else %}
+                                <div class="product product-list">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-3">
+                                            <figure class="product-media">
+                                                <span class="product-label label-new">{{p.get_percentage|floatformat:0}}%</span>
+                                                <a href="{% url 'core:products-detail' p.pid %}">
+                                                    <img src="{{p.image.url}}" alt="Product image" class="product-image">
+                                                </a>
+                                            </figure><!-- End .product-media -->
+                                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-                            <div class="col-lg-4">
-                                <div class="product__discount__item">
-                                    <a href="{% url 'core:products-detail' p.pid %}">
-                                        <div class="product__discount__item__pic set-bg"
-                                            data-setbg="{{p.image.url}}">
-                                            <div class="product__discount__percent">-{{p.get_percentage|floatformat:0}}%</div>
-                                            <!-- <ul class="product__item__pic__hover">
-                                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                                <input type="hidden" value="1" class="product-quantity-{{ p.id }}" id="product-quantity">
-                                                <input type="hidden" value="{{ p.pid }}" class="product-pid-{{ p.id }}">
-                                                <input type="hidden" value="{{ p.image.url }}" class="product-image-{{ p.id }}">
-                                                <input type="hidden" value="{{ p.id }}" class="product-id-{{ p.id }}">
-                                                <input type="hidden" value="{{ p.title }}" class="product-title-{{ p.id }}">
-                                                <li><button data-index='{{ p.id }}' class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i></button></li>
-                                            </ul> -->
-                                        </div>
-                                    </a>
-                                    <div class="product__discount__item__text">
-                                        <span>{{p.category.title}}</span>
-                                        <h5><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</a></h5>            
-                                        <div class="product__item__price">${{p.price}} <span>${{p.old_price}}</span></div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            {% endif %}
-                            {% endfor %}
+                                        <div class="col-6 col-lg-3 order-lg-last">
+                                            <div class="product-list-action">
+                                                <div class="product-price">
+                                                    ${{p.price}}
+                                                </div><!-- End .product-price -->
+                                                <div class="ratings-container">
+                                                    <div class="ratings">
+                                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                                                    </div><!-- End .ratings -->
+                                                    <span class="ratings-text">( 2 Reviews )</span>
+                                                </div><!-- End .rating-container -->
 
-                        </div>
-                    </div>
-                </div>
-                <div class="filter__item">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-5">
-                            <div class="filter__sort">
-                                <span>Sort By</span>
-                                <select>
-                                    <option value="0">Default</option>
-                                    <option value="0">Default</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4">
-                            <div class="filter__found">
-                                <h6><span>{{products.count}}</span> Product{{products.count|pluralize}} found</h6>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-3">
-                            <div class="filter__option">
-                                <span class="icon_grid-2x2"></span>
-                                <span class="icon_ul"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" id="filtered-product">
+                                                <div class="product-action">
+                                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                                </div><!-- End .product-action -->
 
-                    {% for p in products %}
-                    {% if p.get_percentage > 0 %}
+                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                            </div><!-- End .product-list-action -->
+                                        </div><!-- End .col-sm-6 col-lg-3 -->
 
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="main__product__item">
-                            <a href="{% url 'core:products-detail' p.pid %}">
-                                <div class="main__product__item__pic set-bg"
-                                    data-setbg="{{p.image.url}}">
-                                    <div class="main__product__percent">-{{p.get_percentage|floatformat:0}}%</div>
-                                    <!-- <ul class="product__item__pic__hover">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                        <input type="hidden" value="1" class="product-quantity-{{ p.id }}" id="product-quantity">
-                                        <input type="hidden" value="{{ p.pid }}" class="product-pid-{{ p.id }}">
-                                        <input type="hidden" value="{{ p.image.url }}" class="product-image-{{ p.id }}">
-                                        <input type="hidden" value="{{ p.id }}" class="product-id-{{ p.id }}">
-                                        <input type="hidden" value="{{ p.title }}" class="product-title-{{ p.id }}">
-                                        <li><button data-index='{{ p.id }}' class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i></button></li>
-                                    </ul> -->
-                                </div>
-                            </a>
-                            <div class="main__product__item__text">
-                                <span>{{p.category.title}}</span>
-                                <h5><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</a></h5>
-                                <span style="display: none" class="current-product-price-{{ p.id }}">{{p.price}}</span>
-                                <div class="product__item__price">${{p.price}} <span>${{p.old_price}}</span></div>
-                            </div>
-                        </div>
-                    </div>
+                                        <div class="col-lg-6">
+                                            <div class="product-body product-action-inner">
+                                                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                                                <div class="product-cat">
+                                                    <a href="#">{{p.category.title}}</a>
+                                                </div><!-- End .product-cat -->
+                                                <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3><!-- End .product-title -->
 
-                    {% else %}
+                                                <div class="product-content">
+                                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque </p>
+                                                </div><!-- End .product-content -->
+                                                
+                                                <div class="product-nav product-nav-thumbs">
+                                                    <a href="#" class="active">
+                                                        <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
+                                                    </a>
+                                                    <a href="#">
+                                                        <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
+                                                    </a>
 
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="main__product__item">
-                            <a href="{% url 'core:products-detail' p.pid %}">
-                                <div class="main__product__item__pic set-bg"
-                                    data-setbg="{{p.image.url}}">
-                                    <!-- <ul class="product__item__pic__hover">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                        <input type="hidden" value="1" class="product-quantity-{{ p.id }}" id="product-quantity">
-                                        <input type="hidden" value="{{ p.pid }}" class="product-pid-{{ p.id }}">
-                                        <input type="hidden" value="{{ p.image.url }}" class="product-image-{{ p.id }}">
-                                        <input type="hidden" value="{{ p.id }}" class="product-id-{{ p.id }}">
-                                        <input type="hidden" value="{{ p.title }}" class="product-title-{{ p.id }}">
-                                        <li><button data-index='{{ p.id }}' class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i></button></li>
-                                    </ul> -->
-                                </div>
-                            </a>
-                            <div class="main__product__item__text">
-                                <span>{{p.category.title}}</span>
-                                <h5><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</a></h5>
-                                <span style="display: none" class="current-product-price-{{ p.id }}">{{p.price}}</span>
-                                <div class="product__item__price">${{p.price}}</div>
-                            </div>
-                        </div>
-                    </div>
+                                                    <a href="#">
+                                                        <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
+                                                    </a>
+                                                </div><!-- End .product-nav -->
+                                            </div><!-- End .product-body -->
+                                        </div><!-- End .col-lg-6 -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .product -->
+                                {% endif %}
+                                {% endfor %}   
 
-                    {% endif %}
-                    {% endfor %}    
+                            </div><!-- End .products -->
 
-                </div>
-                <!-- <div class="product__pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#"><i class="fa fa-long-arrow-right"></i></a>
-                </div> -->
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Product Section End -->
+                			<nav aria-label="Page navigation">
+							    <ul class="pagination">
+							        <li class="page-item disabled">
+							            <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+							                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+							            </a>
+							        </li>
+							        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
+							        <li class="page-item"><a class="page-link" href="#">2</a></li>
+							        <li class="page-item"><a class="page-link" href="#">3</a></li>
+							        <li class="page-item-total">of 6</li>
+							        <li class="page-item">
+							            <a class="page-link page-link-next" href="#" aria-label="Next">
+							                Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+							            </a>
+							        </li>
+							    </ul>
+							</nav>
+                		</div><!-- End .col-lg-9 -->
+                		<aside class="col-lg-3 order-lg-first">
+                			<div class="sidebar sidebar-shop">
+                				<div class="widget widget-clean">
+                					<label>Filters:</label>
+                					<a href="#" class="sidebar-filter-clear">Clean All</a>
+                				</div><!-- End .widget widget-clean -->
+
+                				<div class="widget widget-collapsible">
+    								<h3 class="widget-title">
+									    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
+									        Category
+									    </a>
+									</h3><!-- End .widget-title -->
+
+									<div class="collapse show" id="widget-1">
+										<div class="widget-body">
+											<div class="filter-items filter-items-count">
+                                                {% for c in categories %}
+												<div class="filter-item">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="filter-checkbox custom-control-input" data-filter="category" id="{{ c.id }}" value="{{ c.id }}">
+														<label class="custom-control-label" for="{{ c.id }}">{{c.title}}</label>
+													</div><!-- End .custom-checkbox -->
+													<span class="item-count">{{c.category.count}}</span>
+												</div><!-- End .filter-item -->
+                                                {% endfor %}
+
+
+											</div><!-- End .filter-items -->
+										</div><!-- End .widget-body -->
+									</div><!-- End .collapse -->
+        						</div><!-- End .widget -->
+
+
+        						<div class="widget widget-collapsible">
+    								<h3 class="widget-title">
+									    <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
+									        Brand
+									    </a>
+									</h3><!-- End .widget-title -->
+
+									<div class="collapse show" id="widget-4">
+										<div class="widget-body">
+											{% for v in vendors %}
+											<div class="filter-items">
+												
+												<div class="filter-item">
+													<div class="custom-control custom-checkbox">
+														<input type="checkbox" class="filter-checkbox custom-control-input" data-filter="vendor" id="{{ v.id }}" value="{{ v.id }}">
+														<label class="custom-control-label" for="{{ v.id }}">{{v.title}}</label>
+													</div><!-- End .custom-checkbox -->
+													
+												</div><!-- End .filter-item -->
+                                                
+                                            </div><!-- End .filter-items -->
+											{% endfor %}
+										</div><!-- End .widget-body -->
+									</div><!-- End .collapse -->
+        						</div><!-- End .widget -->
+
+        						<div class="widget widget-collapsible">
+    								<h3 class="widget-title">
+									    <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
+									        Price
+									    </a>
+									</h3><!-- End .widget-title -->
+
+									<div class="collapse show" id="widget-5">
+										<div class="widget-body">
+                                            <div class="filter-price">
+                                                <div class="filter-price-text">
+                                                    Price Range:
+                                                    <span id="filter-price-range"></span>
+                                                </div><!-- End .filter-price-text -->
+
+                                                <div id="price-slider"></div><!-- End #price-slider -->
+                                            </div><!-- End .filter-price -->
+										</div><!-- End .widget-body -->
+									</div><!-- End .collapse -->
+									<button type="button" id="price-filter-btn" class="btn btn-outline-primary-2">
+										<span>Filter by price</span>
+										<i class="icon-long-arrow-right"></i>
+									  </button>
+        						</div><!-- End .widget -->
+                			</div><!-- End .sidebar sidebar-shop -->
+                		</aside><!-- End .col-lg-3 -->
+                	</div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
 
 {% endblock content %}

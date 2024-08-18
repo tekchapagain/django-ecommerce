@@ -31,7 +31,7 @@ class WishlistAdmin(admin.ModelAdmin):
 # 	list_display = ['user', 'address', 'status']
 
 class ContactUsAdmin(admin.ModelAdmin):
-	list_display = ['name', 'email']
+	list_display = ['name', 'email','message']
 
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategotyAdmin)

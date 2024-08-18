@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'taggit',
     'ckeditor',
     'easyaudit',
+    
 
     # Custom Apps
     'core',
@@ -151,10 +152,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
     'site_header': "Ecommerce",
-    'site_brand': "Valleys",
-    'login_logo': "assets/img/logo.svg",
-    'site_logo': "assets/img/favicon.ico",
-    'copyright': "Valleys Ltd",
+    'site_brand': "Niceclickllc",
+    'login_logo': "assets/images/logo.svg",
+    'site_logo': "assets/images/icons/favicon.ico",
+    'copyright': "Niceclickllc Ltd",
 
     "topmenu_links": [
 
@@ -164,7 +165,7 @@ JAZZMIN_SETTINGS = {
     ],
 }
 
-LOGIN_URL = 'userauths:sing-in'
+LOGIN_URL = 'userauths:sign-in'
 
 AUTH_USER_MODEL = 'userauths.User'
 

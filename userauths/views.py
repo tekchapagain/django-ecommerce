@@ -11,7 +11,6 @@ from userauths.forms import UserRegisterForm
 def register_view(request):
 	if request.method == 'POST':
 		form = UserRegisterForm(request.POST or None)
-
 		if form.is_valid():
 			new_user = form.save()
 			username = form.cleaned_data.get('username')
@@ -29,7 +28,7 @@ def register_view(request):
 		'form': form
 	}
 
-	return render(request, 'userauths/sing-up.html', context)
+	return render(request, 'userauths/sign-up.html', context)
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -54,16 +53,16 @@ def login_view(request):
                 else:
                     return redirect('core:index')
             else:
-                messages.warning(request, "Password is wrong.")
+                messages.warning(request, "Incorrect username or password.")
         except User.DoesNotExist:
             messages.warning(request, f"User with {email} does not exist!")
 
-    return render(request, 'userauths/sing-in.html')
+    return render(request, 'userauths/sign-in.html')
 
 def logout_view(request):
 	logout(request)
 	messages.success(request, "You logged out.")
-	return redirect('userauths:sing-in')
+	return redirect('userauths:sign-in')
 
 @login_required
 def account(request):

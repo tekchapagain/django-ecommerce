@@ -209,8 +209,10 @@ class Address(models.Model):
 class ContactUs(models.Model):
 	name = models.CharField(max_length=100)
 	email = models.CharField(max_length=100)
-	message = models.TextField()
-
+	phone = models.CharField(max_length=12, null=True, blank=True)
+	message = models.TextField(max_length=10)
+	subject = models.CharField(max_length=20, null=True, blank=True)
+	
 	class Meta:
 		verbose_name = 'Contact Us'
 		verbose_name_plural = 'Contact Us'

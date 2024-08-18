@@ -5,70 +5,16 @@
 
 {% block content %}
 
-<!-- Hero Section Begin -->
-<section class="hero hero-normal">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3">
-                <div class="hero__categories">
-                    <div class="hero__categories__all">
-                        <i class="fa fa-bars"></i>
-                        <span>All Categories</span>
-                    </div>
-                    <ul> 
-                        {% for c in categories %}
-                        <li><a href="{% url 'core:category-product-list' c.cid %}">
-                        {{ c.title }}
-                    	</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            <div class="col-lg-9">
-                <div class="hero__search">
-                    <div class="hero__search__form">
-                        <form action="{% url 'core:search' %}" method="GET">
-                            <!-- <div class="hero__search__categories">
-                                All Categories
-                                <span class="arrow_carrot-down"></span>
-                            </div> -->
-                            <input type="text" placeholder="What do yo u need?" name="q">
-                            <button type="submit" class="site-btn">SEARCH</button>
-                        </form>
-                    </div>
-                    <div class="hero__search__phone">
-                        <div class="hero__search__phone__icon">
-                            <i class="fa fa-phone"></i>
-                        </div>
-                        <div class="hero__search__phone__text">
-                            <h5>+65 11.188.888</h5>
-                            <span>support 24/7 time</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Hero Section End -->
-
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="{% static 'assets/img/breadcrumb.jpg' %}">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <div class="breadcrumb__text">
-                    <h2>Account</h2>
-                    <div class="breadcrumb__option">
-                        <a href="{% url 'core:index' %}">Home</a>
-                        <span class="breadcrumb__separator"><i class="fa fa-angle-right"></i></span>
-                        <span>Account</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+	<div class="container">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+			<li class="breadcrumb-item"><a href="">Account</a></li>
+			<li class="breadcrumb-item active" aria-current="page">Detail</li>
+		</ol>
+	</div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
 <!-- Breadcrumb Section End -->
 
 <!-- Account Section Start -->
@@ -118,7 +64,7 @@
 				<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
 					{% if messages %}
 						{% for message in messages %}
-					        <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+					        <div class="auto-close alert alert-{{message.tags}} alert-dismissible" role="alert" id="alert-message">
 					            <div id="form_errors">
 					                    <strong>{{ message }}</strong>   
 					            </div>

@@ -31,6 +31,15 @@ DEBUG = os.environ.get("DEBUG","False").lower() =="true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
+#Sirv Files Storage
+
+AWS_ACCESS_KEY_ID = '0OnUon7Cb5'
+AWS_SECRET_ACCESS_KEY = 'uLMO9GawCVI0OnUon7Cb5jUbW1uwTgGEmK4frjvpCPYFv8ER'
+AWS_STORAGE_BUCKET_NAME = 'niceclickllc'
+AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.sirv.com'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.sirv.com'
+AWS_QUERYSTRING_AUTH = False
+AWS_DEFAULT_ACL = 'public-read'
 
 # Application definition
 
@@ -47,6 +56,7 @@ INSTALLED_APPS = [
     'taggit',
     'ckeditor',
     'easyaudit',
+    'storages',
     
 
     # Custom Apps
@@ -101,7 +111,7 @@ DATABASES = {
 }
 
 database_url = os.environ.get("DATABASE_URL")
-DATABASES["default"] = dj_database_url.parse("postgresql://ecommerce_mj9o_user:LroWSJa6x6h3YBNxI2JjHaHQx21Nvu05@dpg-cr13q9a3esus73aqal0g-a.oregon-postgres.render.com/ecommerce_mj9o")
+DATABASES["default"] = dj_database_url.parse(database_url)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -144,8 +154,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# DEFAULT_FILE_STORAGE = 'ecomproject.storage_backends.PublicMediaStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-MEDIA_URL = "media/"
+MEDIA_URL = 'https://niceclickllc.sirv.com/'
+# MEDIA_URL = "media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

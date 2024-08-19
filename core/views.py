@@ -4,14 +4,14 @@ from django.db.models import Avg, F, ExpressionWrapper, DecimalField
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, \
 ProductImages, ProductReview, Wishlist, Address, ContactUs
 from core.forms import ProductReviewFrom
 from taggit.models import Tag
 
 def index(request):
-	products = Product.objects.filter(product_status='published', featured=True)
-	average_rating = ProductReview.objects.all()
+	featured_products = Product.objects.filter(product_status='published', featured=True).annotate(average_rating=Avg('reviews__rating'))
 	special_offers = Product.objects.filter(product_status='published').annotate(
 		discount_percentage=ExpressionWrapper(
 			((F('old_price') - F('price')) / F('old_price')) * 100,
@@ -22,17 +22,30 @@ def index(request):
 	oldest_products = Product.objects.filter(product_status='published').order_by('date')
 
 	context = {
-		"products": products,
-		'average_rating': average_rating,
+		"featured_products": featured_products,
 		"special_offers": special_offers,
 		"oldest_products": oldest_products,
 	}
 	return render(request, 'core/index.html', context)
 
-def products_list_view(request):
+def products_list_view(request, page):
 	products = Product.objects.filter(product_status='published')
+	paginator = Paginator(products, per_page=5)
+
+	try:
+		page_object = paginator.get_page(page)
+    
+	except PageNotAnInteger:
+		page_object = paginator.get_page(1)
+    
+	except EmptyPage:
+        # If page is out of range deliver last page of results
+        
+		page_object = paginator.get_page(paginator.num_pages)
+
 	context = {
-		"products": products
+		"products" : products,
+		"page_object": page_object
 	}
 	return render(request, 'core/product-list.html', context)
 
@@ -357,3 +370,10 @@ def ajax_contact_form(request):
 
 def about(request):
 	return render(request, 'core/about.html')
+
+
+def error_404(request, exception):
+	return render(request, 'core/404.html',status=404)
+
+def error_500(request):
+	return render(request, 'core/404.html', status =500)

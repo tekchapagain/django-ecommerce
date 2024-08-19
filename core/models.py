@@ -4,6 +4,7 @@ from userauths.models import User
 from ckeditor_uploader.fields import RichTextUploadingField
 from taggit.managers import TaggableManager
 from shortuuid.django_fields import ShortUUIDField
+from ecomproject.storage_backends import MediaStorage
 
 STATUS_CHOICE = (
 	("process", "Processing"),

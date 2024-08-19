@@ -33,13 +33,14 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 #Sirv Files Storage
 
-AWS_ACCESS_KEY_ID = '0OnUon7Cb5'
+AWS_ACCESS_KEY_ID = 'niceclickllc@gmail.com'
 AWS_SECRET_ACCESS_KEY = 'uLMO9GawCVI0OnUon7Cb5jUbW1uwTgGEmK4frjvpCPYFv8ER'
 AWS_STORAGE_BUCKET_NAME = 'niceclickllc'
 AWS_S3_ENDPOINT_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.sirv.com'
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.sirv.com'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.sirv.com/niceclickllc'
 AWS_QUERYSTRING_AUTH = False
 AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_VERIFY = False
 
 # Application definition
 
@@ -157,10 +158,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # DEFAULT_FILE_STORAGE = 'ecomproject.storage_backends.PublicMediaStorage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-MEDIA_URL = 'https://niceclickllc.sirv.com/'
-# MEDIA_URL = "media/"
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+PUBLIC_MEDIA_LOCATION = 'niceclickllc'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
 
 
 # Default primary key field type

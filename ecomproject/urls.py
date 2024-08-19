@@ -35,5 +35,3 @@ if settings.DEBUG:
 
 ### TEST ###
 
-# handler404 = 'core.views.error_404'
-# handler500 = 'core.views.error_500'

@@ -2,7 +2,7 @@ import random
 from core.models import Product, Category, Vendor, CartOrder, \
 CartOrderItems, ProductImages, ProductReview, Wishlist, Address
 from blog.models import Post
-from django.db.models import Min, Max
+from django.db.models import Min, Max,Avg
 from django.contrib import messages
 from taggit.models import Tag
 
@@ -12,7 +12,7 @@ def core_context(request):
 
 	min_max_price = Product.objects.aggregate(Min('price'), Max('price'))
 
-	latest_products = Product.objects.filter(product_status='published').order_by('-date')
+	latest_products = Product.objects.filter(product_status='published').annotate(average_rating=Avg('reviews__rating')).order_by('-date')
 
 	try:
 		wishlist = Wishlist.objects.filter(user=request.user)

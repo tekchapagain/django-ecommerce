@@ -1,7 +1,7 @@
 
 {% extends 'partials/base.html' %}
 {% load static %}
-
+{% load multiply %}
 {% block title %}Niceclickllc | Homepage{% endblock title %}
 
 {% block content %}
@@ -149,7 +149,7 @@
             </div><!-- End .heading-left -->
 
            <div class="heading-right">
-                <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
+                <!-- <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="new-all-link" data-toggle="tab" href="#new-all-tab" role="tab" aria-controls="new-all-tab" aria-selected="true">All</a>
                     </li>
@@ -168,9 +168,9 @@
                     <li class="nav-item">
                         <a class="nav-link" id="new-acc-link" data-toggle="tab" href="#new-acc-tab" role="tab" aria-controls="new-acc-tab" aria-selected="false">Accessories</a>
                     </li>
-                </ul>
-           </div><!-- End .heading-right -->
-        </div><!-- End .heading -->
+                </ul> -->
+           </div>
+        </div>
 
         <div class="tab-content tab-content-carousel just-action-icons-sm">
             <div class="tab-pane p-0 fade show active" id="new-all-tab" role="tabpanel" aria-labelledby="new-all-link">
@@ -207,12 +207,16 @@
                             </a>
 
                             <div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                                {% if request.user.is_authenticated %}
+                                <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ p.id }}" ><span>Add to Wishlist</span></a>
+                                {% else %}
+                                <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></span></a>
+                                {% endif %}
                             </div><!-- End .product-action -->
 
                             <div class="product-action">
                                 <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                <!-- <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> -->
                             </div><!-- End .product-action -->
                         </figure><!-- End .product-media -->
 
@@ -220,7 +224,7 @@
                             <div class="product-cat">
                                 <a href="#">{{ p.category.title }}</a>
                             </div><!-- End .product-cat -->
-                            <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3><!-- End .product-title -->
+                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</a></h3><!-- End .product-title -->
                             <div class="product-price">
                                 {% if p.get_percentage > 0 %}
                                 <span class="new-price">${{ p.price }}</span>
@@ -231,22 +235,8 @@
                             </div><!-- End .product-price -->
                             <div class="ratings-container">
                                 <div class="ratings">
-                                    {% if average_rating.rating %}
-                                    {% for i in "12345" %}
-                                        {% if forloop.counter <= average_rating.rating %}
-                                            <i class="fa fa-star"></i>
-                                        {% else %}
-                                            <i class="fa fa-star-o"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <div class="ratings-val" style="width: 10%;">{{ reviews.count }}</div>
-                                    <span class="ratings-text">( 4 Reviews )</span>
-                                    <!-- <span>({{ reviews.count }} review{{ reviews.count|pluralize }})</span> -->
-                                    {% else %}
-                                    <div class="ratings-val" style="width: 10%;">{{ reviews.count }}</div>
-                                    <span class="ratings-text">( {{ reviews.count }} Reviews )</span>
-                                    <!-- <span>({{ reviews.count }} review{{ reviews.count|pluralize }})</span> -->
-                                    {% endif %}   
+                                    <div class="ratings-val" style="width:{{ p.average_rating|multiply:20 }}%;"></div>
+                                    <span class="ratings-text">( {{p.reviews.count}} Reviews )</span>
                                 </div><!-- End .ratings -->
                                 
                             </div><!-- End .rating-container -->
@@ -262,7 +252,7 @@
     <div class="mb-6"></div><!-- End .mb-6 -->
 
     <div class="container">
-        <div class="cta cta-border mb-5" style="background-image: url(assets/images/demos/demo-4/bg-1.jpg);">
+        <div class="cta cta-border mb-5" style="background-image: url({% static './assets/images/demos/demo-4/bg-1.jpg' %});">
             <img src="{% static './assets/images/demos/demo-4/camera.png' %}" alt="camera" class="cta-img">
             <div class="row justify-content-center">
                 <div class="col-md-12">
@@ -285,7 +275,7 @@
 
         <div class="row">
             <div class="col-lg-6 deal-col">
-                <div class="deal" style="background-image: url('assets/images/demos/demo-4/deal/bg-1.jpg');">
+                <div class="deal" style="background-image: url({% static './assets/images/demos/demo-4/bg-1.jpg' %});">
                     <div class="deal-top">
                         <h2>Deal of the Day.</h2>
                         <h4>Limited quantities. </h4>
@@ -309,7 +299,7 @@
             </div><!-- End .col-lg-6 -->
 
             <div class="col-lg-6 deal-col">
-                <div class="deal" style="background-image: url('assets/images/demos/demo-4/deal/bg-2.jpg');">
+                <div class="deal" style="background-image: url({% static './assets/images/demos/demo-4/deal/bg-2.jpg' %} );">
                     <div class="deal-top">
                         <h2>Your Exclusive Offers.</h2>
                         <h4>Sign in to see amazing deals.</h4>
@@ -368,23 +358,23 @@
             </a>
 
             <a href="#" class="brand">
-                <img src="assets/images/brands/2.png" alt="Brand Name">
+                <img src="{% static './assets/images/brands/2.png' %}" alt="Brand Name">
             </a>
 
             <a href="#" class="brand">
-                <img src="assets/images/brands/3.png" alt="Brand Name">
+                <img src="{% static './assets/images/brands/3.png' %}" alt="Brand Name">
             </a>
 
             <a href="#" class="brand">
-                <img src="assets/images/brands/4.png" alt="Brand Name">
+                <img src="{% static './assets/images/brands/4.png' %}" alt="Brand Name">
             </a>
 
             <a href="#" class="brand">
-                <img src="assets/images/brands/5.png" alt="Brand Name">
+                <img src="{% static './assets/images/brands/5.png' %}" alt="Brand Name">
             </a>
 
             <a href="#" class="brand">
-                <img src="assets/images/brands/6.png" alt="Brand Name">
+                <img src="{% static './assets/images/brands/6.png' %}" alt="Brand Name">
             </a>
         </div><!-- End .owl-carousel -->
     </div><!-- End .container -->
@@ -444,7 +434,7 @@
                                         }
                                     }
                                 }'>
-                                {% for p in products %}
+                                {% for p in featured_products %}
                                 {% if p.get_percentage > 0 %}
                                 <div class="product product-2">
                                     <figure class="product-media">
@@ -454,12 +444,16 @@
                                         </a>
 
                                         <div class="product-action-vertical">
-                                            <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                                            {% if request.user.is_authenticated %}
+                                            <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ p.id }}" ><span>Add to Wishlist</span></a>
+                                            {% else %}
+                                            <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></span></a>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
 
                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                            <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>
+                                            <!-- <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> -->
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
 
@@ -493,12 +487,16 @@
                                         </a>
 
                                         <div class="product-action-vertical">
-                                            <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                                            {% if request.user.is_authenticated %}
+                                            <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ p.id }}" ><span>Add to Wishlist</span></a>
+                                            {% else %}
+                                            <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></span></a>
+                                            {% endif %}
                                         </div><!-- End .product-action -->
 
                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                            <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>
+                                            <!-- <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> -->
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
 
@@ -554,13 +552,15 @@
                             </a>
 
                             <div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon btn-wishlist" title="Add to wishlist"></a>
+                                {% if request.user.is_authenticated %}
+                                <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ p.id }}" ><span>Add to Wishlist</span></a>
+                                {% else %}
+                                <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></span></a>
+                                {% endif %}
                             </div><!-- End .product-action -->
 
                             <div class="product-action">
-                                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
-                                <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                            </div><!-- End .product-action -->
+                                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>                            </div><!-- End .product-action -->
                         </figure><!-- End .product-media -->
 
                         <div class="product-body">

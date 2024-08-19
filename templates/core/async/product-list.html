@@ -18,15 +18,16 @@
                 </div><!-- End .product-price -->
                 <div class="ratings-container">
                     <div class="ratings">
-                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                        <div class="ratings-val" style="width: 20%;"></div>
+                        <!-- End .ratings-val -->
                     </div><!-- End .ratings -->
-                    <span class="ratings-text">( 2 Reviews )</span>
+                    <span class="ratings-text">( {{ p.reviews.count }} Reviews )</span>
                 </div><!-- End .rating-container -->
 
-                <div class="product-action">
-                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
-                </div><!-- End .product-action -->
+                <!-- <div class="product-action">
+                                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                                </div> -->
 
                 <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
             </div><!-- End .product-list-action -->
@@ -34,19 +35,20 @@
 
         <div class="col-lg-6">
             <div class="product-body product-action-inner">
-                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add
+                        to wishlist</span></a>
                 <div class="product-cat">
                     <a href="#">{{p.category.title}}</a>
                 </div><!-- End .product-cat -->
-                <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3><!-- End .product-title -->
+                <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3>
+                <!-- End .product-title -->
 
                 <div class="product-content">
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque </p>
+                    <p>{{ p.description|safe|truncatechars:150 }}</p>
                 </div><!-- End .product-content -->
-                
-                <img data-imgbigurl="{{ p.images.url }}"
-                    src="{{ p.images.url }}" alt="">
-                
+
+                <img data-imgbigurl="{{ p.images.url }}" src="{{ p.images.url }}" alt="">
+
                 <div class="product-nav product-nav-thumbs">
                     {% for p in p_image %}
                     <a href="#" class="active">
@@ -77,47 +79,50 @@
                 </div><!-- End .product-price -->
                 <div class="ratings-container">
                     <div class="ratings">
-                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                        <div class="ratings-val" style="width: 20%;"></div>
+                        <!-- End .ratings-val -->
                     </div><!-- End .ratings -->
-                    <span class="ratings-text">( 2 Reviews )</span>
+                    <span class="ratings-text">( {{ p.reviews.count }} Reviews )</span>
                 </div><!-- End .rating-container -->
+                <!--
+                                                <div class="product-action">
+                                                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
+                                                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
+                                                </div> End .product-action -->
 
-                <div class="product-action">
-                    <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a>
-                    <a href="#" class="btn-product btn-compare" title="Compare"><span>compare</span></a>
-                </div><!-- End .product-action -->
-
-                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                <a href="#" class="btn-product btn-cart"><span>Add to cart</span></a>
             </div><!-- End .product-list-action -->
         </div><!-- End .col-sm-6 col-lg-3 -->
 
         <div class="col-lg-6">
             <div class="product-body product-action-inner">
-                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add to wishlist</span></a>
+                <a href="#" class="btn-product btn-wishlist" title="Add to wishlist"><span>add
+                        to wishlist</span></a>
                 <div class="product-cat">
                     <a href="#">{{p.category.title}}</a>
                 </div><!-- End .product-cat -->
-                <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3><!-- End .product-title -->
+                <h3 class="product-title"><a href="product.html">{{p.title}}</a></h3>
+                <!-- End .product-title -->
 
                 <div class="product-content">
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit. Pellentesque </p>
+                    <p>{{ p.description|safe|truncatechars:150 }}</p>
                 </div><!-- End .product-content -->
-                
-                <div class="product-nav product-nav-thumbs">
-                    <a href="#" class="active">
-                        <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
-                    </a>
-                    <a href="#">
-                        <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
-                    </a>
 
-                    <a href="#">
-                        <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
-                    </a>
-                </div><!-- End .product-nav -->
+                <!-- <div class="product-nav product-nav-thumbs">
+                                                    <a href="#" class="active">
+                                                        <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
+                                                    </a>
+                                                    <a href="#">
+                                                        <img src="assets/images/products/product-4-2-thumb.jpg" alt="product desc">
+                                                    </a>
+
+                                                    <a href="#">
+                                                        <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
+                                                    </a>
+                                                </div> -->
             </div><!-- End .product-body -->
         </div><!-- End .col-lg-6 -->
     </div><!-- End .row -->
 </div><!-- End .product -->
 {% endif %}
-{% endfor %}   
+{% endfor %}

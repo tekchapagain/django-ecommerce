@@ -1,5 +1,6 @@
 from django.urls import path
 from core import views
+from django.conf.urls import handler404
 
 app_name = 'core'
 
@@ -9,7 +10,7 @@ urlpatterns = [
 	path('', views.index, name='index'),
 	
 	# Product
-	path('products/', views.products_list_view, name='products-list'),
+	path('products/<int:page>', views.products_list_view, name='products-list'),
 	path('product/<pid>/', views.product_detail_view, name='products-detail'),
 
 	# Category
@@ -61,4 +62,8 @@ urlpatterns = [
 
 	# About Us
 	path('about/', views.about, name='about'),
+    
 ]
+
+# handler404 = 'core.views.error_404'
+# handler500 = 'core.views.error_500'

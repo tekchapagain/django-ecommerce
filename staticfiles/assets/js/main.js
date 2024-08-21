@@ -170,7 +170,7 @@ $(document).ready(function () {
 		if (priceSlider == null) return;
 
 		noUiSlider.create(priceSlider, {
-			start: [ 0, 2000 ],
+			start: [ 0, 1500 ],
 			connect: true,
 			step: 50,
 			margin: 200,

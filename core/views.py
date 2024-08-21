@@ -28,25 +28,48 @@ def index(request):
 	}
 	return render(request, 'core/index.html', context)
 
-def products_list_view(request, page):
+def products_list_view(request):
 	products = Product.objects.filter(product_status='published')
+	categories = request.GET.getlist('category[]')
+	vendors = request.GET.getlist('vendor[]')
+	page_number = request.GET.get('page',1)
+	min_price = request.GET.get('min_price')
+	max_price = request.GET.get('max_price')
+	if min_price or max_price:
+		products = products.filter(price__gte=min_price)
+		products = products.filter(price__lte=max_price)
+
+	if categories:
+		products = products.filter(category__id__in=categories).distinct()
+	if len(vendors) > 0:
+		products = products.filter(vendor__id__in=vendors).distinct()
+	
 	paginator = Paginator(products, per_page=5)
 
 	try:
-		page_object = paginator.get_page(page)
-    
+		page_object = paginator.get_page(page_number)
 	except PageNotAnInteger:
 		page_object = paginator.get_page(1)
-    
 	except EmptyPage:
         # If page is out of range deliver last page of results
-        
 		page_object = paginator.get_page(paginator.num_pages)
 
 	context = {
-		"products" : products,
-		"page_object": page_object
+		'page_object': page_object,
+		'category' : categories
 	}
+
+	if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+		toolbox = render_to_string('partials/toolbox.html', context)
+		product_list = render_to_string('partials/product-list.html', context)
+		pagination = render_to_string('partials/pagination.html', context)
+
+		return JsonResponse({
+			'toolbox': toolbox,
+			'html': product_list,
+			'pagination':pagination
+			})
+	
 	return render(request, 'core/product-list.html', context)
 
 def category_list_view(request):
@@ -191,12 +214,30 @@ def filter_product(request):
 	if len(vendors) > 0:
 		products = products.filter(vendor__id__in=vendors).distinct()
 
-	context = {
-		'products': products
-	}
+	paginator = Paginator(products, per_page=5)
 
-	data = render_to_string('core/async/product-list.html', context)
-	return JsonResponse({'data': data})
+	try:
+		page_object = paginator.get_page(1)
+    
+	except PageNotAnInteger:
+		page_object = paginator.get_page(1)
+    
+	except EmptyPage:
+        # If page is out of range deliver last page of results
+		page_object = paginator.get_page(paginator.num_pages)
+
+	context = {
+		'page_object': page_object,
+	}
+	toolbox = render_to_string('partials/toolbox.html', context)
+	product_list = render_to_string('partials/product-list.html', context)
+	pagination = render_to_string('partials/pagination.html', context)
+
+	return JsonResponse({
+		'toolbox': toolbox,
+		'html': product_list,
+		'pagination':pagination
+		})
 
 def add_to_cart(request):
 	cart_product = {}
@@ -227,11 +268,30 @@ def add_to_cart(request):
 			'totalcartitems':len(request.session['cart_data_object'])
 		})
 
+# def cart_view(request):
+# 	cart_total_amount = 0
+# 	if 'cart_data_object' in request.session:
+# 		for product_id, item in request.session['cart_data_object'].items():
+# 			print(item['qty'], item['price'])
+# 			cart_total_amount += int(item['qty']) * float(item['price'])
+# 			# cart_total_amount += int('1') * 100
+
+# 		return render(request, 'core/cart.html', {
+# 			'cart_data': request.session['cart_data_object'],
+# 			'totalcartitems': len(request.session['cart_data_object']),
+# 			'cart_total_amount': cart_total_amount
+# 		})
+		
+# 	else:
+# 		return render(request, 'core/cart.html')
+	
 def cart_view(request):
 	cart_total_amount = 0
 	if 'cart_data_object' in request.session:
 		for product_id, item in request.session['cart_data_object'].items():
+			print(item['qty'], item['price'])
 			cart_total_amount += int(item['qty']) * float(item['price'])
+			# cart_total_amount += int('1') * 100
 
 		return render(request, 'core/cart.html', {
 			'cart_data': request.session['cart_data_object'],
@@ -254,6 +314,7 @@ def delete_from_cart(request):
 	if 'cart_data_object' in request.session:
 		for product_id, item in request.session['cart_data_object'].items():
 			cart_total_amount += int(item['qty']) * float(item['price'])
+			# cart_total_amount += int('1') * 100
 
 	context = render_to_string('core/async/cart-list.html', {
 			'cart_data': request.session['cart_data_object'],
@@ -266,7 +327,9 @@ def delete_from_cart(request):
 		})
 
 def update_cart(request):
-	product_id = str(request.GET['id'])
+
+	product_id = request.GET.getlist('id[]')
+	# product_id = str(request.GET['id'])
 	product_qty = request.GET['qty']
 	if 'cart_data_object' in request.session:
 		if product_id in request.session['cart_data_object']:

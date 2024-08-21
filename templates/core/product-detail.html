@@ -52,8 +52,8 @@
                                 <a class="ratings-text" href="#product-review-link" id="review-link">( {{ reviews.count }} Reviews )</a>
                             </div><!-- End .rating-container -->
 
-                            <div class="product-price">
-                                ${{product.price}}
+                            <div class="product-price" >
+                                ${{ product.price }}
                             </div><!-- End .product-price -->
 
                             <div class="product-content">
@@ -64,12 +64,17 @@
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
                                 <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                    <input type="number" id="qty" class="product-quantity-{{ product.id }}" value="1" min="1" max="10" step="1" data-decimals="0" required>
                                 </div><!-- End .product-details-quantity -->
                             </div><!-- End .details-filter-row -->
 
                             <div class="product-details-action">
                                 {% if product.stock_count %}
+                                <input type="hidden" value="{{ product.pid }}" id="product-pid">
+                                <input type="hidden" id= "product-image" value="{{ product.image.url }}" class="product-image">
+                                <input type="hidden" value="{{ product.id }}" id="product-id">
+                                <input type="hidden" value = {{ product.price }} id="product-price">
+                                <input type="hidden" value="{{ product.title }}" id="product-title">
                                 <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
                                 {% else %}
                                 <a  class="btn disabled"><span>Out of Stock</span></a>
@@ -256,7 +261,7 @@
                         </div><!-- End .product-action-vertical -->
 
                         <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                            <a class="btn-product btn-cart" data-index="{{ product.id }}"><span>add to cart</span></a>
                         </div><!-- End .product-action -->
                     </figure><!-- End .product-media -->
 

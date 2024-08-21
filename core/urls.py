@@ -10,7 +10,7 @@ urlpatterns = [
 	path('', views.index, name='index'),
 	
 	# Product
-	path('products/<int:page>', views.products_list_view, name='products-list'),
+	path('products/', views.products_list_view, name='products-list'),
 	path('product/<pid>/', views.product_detail_view, name='products-detail'),
 
 	# Category
@@ -65,5 +65,3 @@ urlpatterns = [
     
 ]
 
-# handler404 = 'core.views.error_404'
-# handler500 = 'core.views.error_500'

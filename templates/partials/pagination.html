@@ -1,0 +1,29 @@
+<nav aria-label="Page navigation">
+    {% block pagination %}
+    <ul class="pagination">
+        {% if page_object.has_previous %}
+        <li class="page-item">
+            <a class="page-link page-link-prev" data-page="{{ page_object.previous_page_number }}" aria-label="Previous" tabindex="-1"
+                aria-disabled="true">
+                <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+            </a>
+        </li>
+        {% endif%}
+        
+        {% for page_number in page_object.paginator.page_range %}
+        {% if page_number == page_object.number %} 
+        <li class="page-item active " aria-current="page"><a class="page-link" href=""  data-page="{{page_number}}">{{page_number}}</a></li>
+        {% else %}
+        <li class="page-item" aria-current="page"><a class="page-link" href="" data-page="{{page_number}}">{{page_number}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_object.has_next %}
+        <li class="page-item">
+            <a class="page-link page-link-next" data-page="{{ page_object.next_page_number }}" aria-label="Next">
+                Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endblock %}
+</nav>

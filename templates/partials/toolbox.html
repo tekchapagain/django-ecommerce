@@ -1,0 +1,19 @@
+<div class="toolbox-left">
+    <div class="toolbox-info">
+        Showing <span>{{ page_object.start_index }}-{{ page_object.end_index }} of {{page_object.paginator.count}}</span> Products
+    </div><!-- End .toolbox-info -->
+</div><!-- End .toolbox-left -->
+
+<div class="toolbox-right">
+    <div class="toolbox-sort">
+        <label for="sortby">Sort by:</label>
+        <div class="select-custom">
+            <select name="sortby" id="sortby" class="form-control">
+                <option value="default" selected="selected">Default</option>
+                <option value="popularity">Most Popular</option>
+                <option value="rating">Most Rated</option>
+                <option value="date">Date</option>
+            </select>
+        </div>
+    </div><!-- End .toolbox-sort -->
+</div><!-- End .toolbox-right -->

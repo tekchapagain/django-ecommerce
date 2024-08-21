@@ -10733,6 +10733,8 @@ small.form-text {
 
 .pagination {
     border-radius: 0;
+    bottom: 0px;
+    position: relative;
     align-items: center;
     margin-bottom: 2rem
 }

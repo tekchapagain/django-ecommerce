@@ -134,6 +134,7 @@ $(document).ready(function (){
 
 $('.btn-cart').on('click', function(){
 
+<<<<<<< Updated upstream
     let this_val = $(this)
     let index = this_val.attr('data-index')
 
@@ -173,12 +174,54 @@ $('.btn-cart').on('click', function(){
         },
     })
 })
+=======
+<<<<<<< Updated upstream
+$(document).on('input', '.shoping__cart__quantity input[type="text"], .product__details__quantity input[type="text"]', function() {
+    var value = $(this).val();
+    var cleanedValue = value.replace(/[^\d]/g, '');
+    $(this).val(cleanedValue);
+});
+
+// Username Validation
+=======
+    let this_val = $(this)
+    let product_id = $(this).attr('data-product-id')
+    let product_qty =  $('#qty').val()
+    $.ajax({
+        url: '/add-to-cart',
+        data: {
+            'id': product_id,
+            'qty': product_qty
+        },
+        dataType: 'json',
+        success: function(response){
+            this_val.html('<span>Added</span>')
+            $('.cart-count').text(response.totalcartitems)
+        },
+    })
+})
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 // Delete from cart
 
+<<<<<<< Updated upstream
 $(document).on('click', '.delete-product', function(){
 
 
+=======
+<<<<<<< Updated upstream
+// For account photo file input
+function updateFileName() {
+	var input = document.getElementById('customFile');
+	var label = document.getElementById('fileNameLabel');
+	var fileName = input.files[0].name;
+	label.innerText = fileName;
+}
+=======
+$(document).on('click', '.delete-product', function(){
+
+>>>>>>> Stashed changes
     let product_id = $(this).attr("data-product")
     let this_val = $(this)
 
@@ -193,8 +236,14 @@ $(document).on('click', '.delete-product', function(){
         },
         success: function(response){
             this_val.show()
+<<<<<<< Updated upstream
             $('.cart-items-count').text(response.totalcartitems)
             $('#cart-list').html(response.data)
+=======
+            $('#cart-list').html(response.cart)
+            $('#cart-summary').html(response.cart_summary)
+            $('.cart-count').text(response.totalcartitems)
+>>>>>>> Stashed changes
         }
     })
 })
@@ -203,6 +252,7 @@ $(document).on('click', '.delete-product', function(){
 
 $(document).on('click', '.update-product', function(){
 
+<<<<<<< Updated upstream
     let productIds = [];
     $('.product-list').each(function(){
         productIds.push($(this).data('product-id'));
@@ -212,12 +262,25 @@ $(document).on('click', '.update-product', function(){
     let this_val = $(this)
     let product_quantity = $('.product-qty-' + product_id).val()
     
+=======
+    var items = [];
+    let this_val = $(this)
+    $('#cart-table tbody tr').each(function() {
+        var itemId = $(this).data('item-id');
+        var quantity = $(this).find('.quantity-input').val();
+        items.push(itemId + '|' + quantity);
+    });
+>>>>>>> Stashed changes
 
     $.ajax({
         url: '/update-cart',
         data: {
+<<<<<<< Updated upstream
             'id': productIds,
             'qty': product_quantity,
+=======
+            'items[]':items
+>>>>>>> Stashed changes
         },
         dataType: 'json',
         beforeSend: function(){
@@ -225,7 +288,13 @@ $(document).on('click', '.update-product', function(){
         },
         success: function(response){
             this_val.show()
+<<<<<<< Updated upstream
             $('#cart-list').html(response.data)
+=======
+            $('#cart-list').html(response.cart)
+            $('#cart-summary').html(response.cart_summary)
+            $('.cart-count').text(response.totalcartitems)
+>>>>>>> Stashed changes
         }
     })
 })
@@ -275,3 +344,7 @@ $(document).on('click', '.delete-wishlist-product', function(){
         }
     })
 })
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes

@@ -1,5 +1,5 @@
 import random
-from core.models import Product, Category, Vendor, CartOrder, \
+from core.models import Product, Category, Vendor,Cart,CartItem, CartOrder, \
 CartOrderItems, ProductImages, ProductReview, Wishlist, Address
 from blog.models import Post
 from django.db.models import Min, Max,Avg
@@ -28,11 +28,12 @@ def core_context(request):
 	# 	address = Address.objects.get(user=request.user)
 	# except:
 	# 	address = None
-
-	cart_total_amount = 0
-	if 'cart_data_object' in request.session:
-		for product_id, item in request.session['cart_data_object'].items():
-			cart_total_amount += int(item['qty']) * float(item['price'])
+	cart_item = None
+	try:
+		cart, created = Cart.objects.get_or_create(user=request.user)
+		cart_item = CartItem.objects.filter(cart_id= cart.id).all()
+	except:
+		cart_item: None
 
 	return {
 		'categories': categories,
@@ -40,7 +41,7 @@ def core_context(request):
 		'wishlist': wishlist,
 		# 'address': address,
 		'min_max_price': min_max_price,
-		'cart_total_amount': cart_total_amount,
+		'cart_item': cart_item,
 		'latest_products': latest_products,
 		'random_product_tags': random_product_tags,
 		'blog_posts': blog_posts,

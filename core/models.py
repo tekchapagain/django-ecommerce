@@ -132,8 +132,45 @@ class ProductImages(models.Model):
 
 
 ####### Cart, Order #######
+class Cart(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
 
+	def __str__(self):
+		if self.user:
+			return f"Cart {self.id}(User: {self.user.username})"
+	@property
+	def total_price(self):
+		return sum(item.total_price for item in self.items.all())
+	
+	@property
+	def total_item(self):
+		return sum(item.quantity for item in self.items.all())
+	
+	@property
+	def unique_product_count(self):
+		return self.items.values('product').distinct().count()
+	
+class CartItem(models.Model):
+	cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+	product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+	quantity = models.PositiveIntegerField(default=1)
+	added_at = models.DateTimeField(auto_now_add=True)
 
+	def __str__(self):
+		return f"{self.quantity} x {self.product.title}"
+	
+	@property
+	def total_price(self):
+	# Calculate total price for this cart item
+		return self.product.price * self.quantity
+	
+	def save(self, *args, **kwargs):
+	# Optional: ensure stock is available when adding items to the cart
+		if self.quantity > self.product.stock_count:
+			raise ValueError("Not enough stock for this product.")
+		super().save(*args, **kwargs)
 
 class CartOrder(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)

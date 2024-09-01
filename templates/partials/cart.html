@@ -1,0 +1,25 @@
+{% for item in cart_items %}
+<tr data-item-id="{{ item.id }}">
+    <td class="product-col">
+        <div class="product product-list" data-product-id="{{ item.product.pid }}">
+            <figure class="product-media">
+                <a href="#">
+                    <img src="{{ item.product.image.url }}" alt="Product image">
+                </a>
+            </figure>
+
+            <h3 class="product-title">
+                <a href="#" >{{ item.product.title }}</a>
+            </h3><!-- End .product-title -->
+        </div><!-- End .product -->
+    </td>
+    <td class="price-col">${{ item.product.price|floatformat:2 }}</td>
+    <td class="quantity-col">
+        <div class="cart-product-quantity">
+            <input type="number" title = 'quantity' class="quantity-input" value="{{ item.quantity }}" min="1" max="10" step="1" data-decimals="0">
+        </div><!-- End .cart-product-quantity -->
+    </td>
+    <td class="total-col">${% widthratio item.product.price 1 item.quantity %}</td>
+    <td><button class="delete-product" data-product="{{ item.product.pid }}" style="border: none; background: none;"><i class="icon-close"></i></i></button> <td>
+</tr>
+{% endfor %}

@@ -1,11 +1,19 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Avg, F, ExpressionWrapper, DecimalField
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+<<<<<<< Updated upstream
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
 from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, \
+=======
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from core.models import Product, Category, Vendor,Cart, CartItem, CartOrder, CartOrderItems, \
+>>>>>>> Stashed changes
 ProductImages, ProductReview, Wishlist, Address, ContactUs
 from core.forms import ProductReviewFrom
 from taggit.models import Tag
@@ -239,34 +247,16 @@ def filter_product(request):
 		'pagination':pagination
 		})
 
-def add_to_cart(request):
-	cart_product = {}
 
-	cart_product[str(request.GET['id'])] = {
-		'qty': request.GET['qty'],
-		'title': request.GET['title'],
-		'price': request.GET['price'],
-		'image': request.GET['image'],
-		'pid': request.GET['pid'],
-	}
+#### Cart Views ##########
 
-	if 'cart_data_object' in request.session:
-		if str(request.GET['id']) in request.session['cart_data_object']:
-			cart_data = request.session['cart_data_object']
-			cart_data[str(request.GET['id'])]['qty'] = int(cart_product[str(request.GET['id'])]['qty'])
-			cart_data.update(cart_data)
-			request.session['cart_data_object'] = cart_data
-		else:
-			cart_data = request.session['cart_data_object']
-			cart_data.update(cart_product)
-			request.session['cart_data_object'] = cart_data
+def get_or_create_cart(user):
+	if user.is_authenticated:
+		cart, created = Cart.objects.get_or_create(user=user)
 	else:
-		request.session['cart_data_object'] = cart_product
+		cart = Cart.objects.get_or_create(user=None)[0]
+	return cart
 
-	return JsonResponse({
-			'data':request.session['cart_data_object'],
-			'totalcartitems':len(request.session['cart_data_object'])
-		})
 
 # def cart_view(request):
 # 	cart_total_amount = 0
@@ -286,72 +276,128 @@ def add_to_cart(request):
 # 		return render(request, 'core/cart.html')
 	
 def cart_view(request):
+<<<<<<< Updated upstream
 	cart_total_amount = 0
 	if 'cart_data_object' in request.session:
 		for product_id, item in request.session['cart_data_object'].items():
 			print(item['qty'], item['price'])
 			cart_total_amount += int(item['qty']) * float(item['price'])
+<<<<<<< Updated upstream
 			# cart_total_amount += int('1') * 100
+=======
+=======
+	try:
+		cart = get_or_create_cart(request.user)
+		context = {
+			'cart': cart,
+			'cart_items': cart.items.all(),
+			'cart_total': cart.total_price
+		}
+	except:
+		context = {
+		}
+		cart = None
+	return render(request, 'core/cart.html', context)
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
-		return render(request, 'core/cart.html', {
-			'cart_data': request.session['cart_data_object'],
-			'totalcartitems': len(request.session['cart_data_object']),
-			'cart_total_amount': cart_total_amount
-		})
-		
+
+def add_to_cart(request):
+	product_id = request.GET['id']
+	try:
+		quantity = int(request.GET['qty'])
+	except:
+		quantity = 1
+	product = Product.objects.get(id=product_id)
+	cart, created = Cart.objects.get_or_create(user=request.user)
+	cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+
+	context = { 
+		'totalcartitems': cart.unique_product_count
+	}
+	if created:
+		cart_item.quantity = quantity
 	else:
-		return render(request, 'core/cart.html')
+		cart_item.quantity += quantity
+	cart_item.save()
+	return JsonResponse(context)
+
 
 def delete_from_cart(request):
-	product_id = str(request.GET['id'])
-	if 'cart_data_object' in request.session:
-		if product_id in request.session['cart_data_object']:
-			cart_data = request.session['cart_data_object']
-			del request.session['cart_data_object'][product_id]
-			request.session['cart_data_object'] = cart_data
+	product_id = request.GET['id']
+	cart = get_or_create_cart(request.user)
+	product = get_object_or_404(Product, pid = product_id)
+	cart_item= CartItem.objects.filter(cart_id=cart.id, product=product).first()
+	if cart_item:
+		cart_item.delete()
 
+<<<<<<< Updated upstream
 	cart_total_amount = 0
 	if 'cart_data_object' in request.session:
 		for product_id, item in request.session['cart_data_object'].items():
 			cart_total_amount += int(item['qty']) * float(item['price'])
+<<<<<<< Updated upstream
 			# cart_total_amount += int('1') * 100
+=======
+=======
+	count = cart.unique_product_count
+	context = {
+			'cart_items': cart.items.all(),
+			'cart_total': cart.total_price,
+		}
+	
+	cart = render_to_string('partials/cart.html', context)
+	cart_summary = render_to_string('partials/cart_summary.html', context)
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
-	context = render_to_string('core/async/cart-list.html', {
-			'cart_data': request.session['cart_data_object'],
-			'totalcartitems': len(request.session['cart_data_object']),
-			'cart_total_amount': cart_total_amount
-		})
 	return JsonResponse({
-			'data': context,
-			'totalcartitems': len(request.session['cart_data_object']),
-		})
+		'cart': cart,
+		'cart_summary': cart_summary,
+		'totalcartitems': count
+	})
 
 def update_cart(request):
+<<<<<<< Updated upstream
 
 	product_id = request.GET.getlist('id[]')
 	# product_id = str(request.GET['id'])
+=======
+<<<<<<< Updated upstream
+	product_id = str(request.GET['id'])
+>>>>>>> Stashed changes
 	product_qty = request.GET['qty']
 	if 'cart_data_object' in request.session:
 		if product_id in request.session['cart_data_object']:
 			cart_data = request.session['cart_data_object']
 			cart_data[str(request.GET['id'])]['qty'] = product_qty
 			request.session['cart_data_object'] = cart_data
+=======
+	items = request.GET.getlist('items[]')
+	for item in items:
+		item_id, quantity = item.split('|')
+		cart_item = get_object_or_404(CartItem, id = item_id)
+		cart_item.quantity = int(quantity)
+		cart_item.save()
+	cart = get_or_create_cart(request.user)
 
-	cart_total_amount = 0
-	if 'cart_data_object' in request.session:
-		for product_id, item in request.session['cart_data_object'].items():
-			cart_total_amount += int(item['qty']) * float(item['price'])
+	count = cart.unique_product_count
+	context = {
+			'cart_items': cart.items.all(),
+			'cart_total': cart.total_price,
+		}
+	
+	cart = render_to_string('partials/cart.html', context)
+	cart_summary = render_to_string('partials/cart_summary.html', context)
+>>>>>>> Stashed changes
 
-
-	context = render_to_string('core/async/cart-list.html', {
-			'cart_data': request.session['cart_data_object'],
-			'totalcartitems': len(request.session['cart_data_object']),
-			'cart_total_amount': cart_total_amount
-		})
 	return JsonResponse({
-			'data': context,
-			'totalcartitems': len(request.session['cart_data_object']),
-		})
+		'cart': cart,
+		'cart_summary': cart_summary,
+		'totalcartitems': count
+	})
+
+###### Cart View Ends ##############
 
 @login_required
 def wishlist_view(request):

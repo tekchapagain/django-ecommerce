@@ -1,5 +1,4 @@
 .env
-env/
 assets1/
 migrations/
 
@@ -53,3 +52,4 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+env/

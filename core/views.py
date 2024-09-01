@@ -4,16 +4,8 @@ from django.db.models import Avg, F, ExpressionWrapper, DecimalField
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
-<<<<<<< Updated upstream
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, \
-=======
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from core.models import Product, Category, Vendor,Cart, CartItem, CartOrder, CartOrderItems, \
->>>>>>> Stashed changes
 ProductImages, ProductReview, Wishlist, Address, ContactUs
 from core.forms import ProductReviewFrom
 from taggit.models import Tag
@@ -276,16 +268,6 @@ def get_or_create_cart(user):
 # 		return render(request, 'core/cart.html')
 	
 def cart_view(request):
-<<<<<<< Updated upstream
-	cart_total_amount = 0
-	if 'cart_data_object' in request.session:
-		for product_id, item in request.session['cart_data_object'].items():
-			print(item['qty'], item['price'])
-			cart_total_amount += int(item['qty']) * float(item['price'])
-<<<<<<< Updated upstream
-			# cart_total_amount += int('1') * 100
-=======
-=======
 	try:
 		cart = get_or_create_cart(request.user)
 		context = {
@@ -298,9 +280,6 @@ def cart_view(request):
 		}
 		cart = None
 	return render(request, 'core/cart.html', context)
->>>>>>> Stashed changes
->>>>>>> Stashed changes
-
 
 def add_to_cart(request):
 	product_id = request.GET['id']
@@ -331,15 +310,6 @@ def delete_from_cart(request):
 	if cart_item:
 		cart_item.delete()
 
-<<<<<<< Updated upstream
-	cart_total_amount = 0
-	if 'cart_data_object' in request.session:
-		for product_id, item in request.session['cart_data_object'].items():
-			cart_total_amount += int(item['qty']) * float(item['price'])
-<<<<<<< Updated upstream
-			# cart_total_amount += int('1') * 100
-=======
-=======
 	count = cart.unique_product_count
 	context = {
 			'cart_items': cart.items.all(),
@@ -348,8 +318,6 @@ def delete_from_cart(request):
 	
 	cart = render_to_string('partials/cart.html', context)
 	cart_summary = render_to_string('partials/cart_summary.html', context)
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
 	return JsonResponse({
 		'cart': cart,
@@ -358,21 +326,6 @@ def delete_from_cart(request):
 	})
 
 def update_cart(request):
-<<<<<<< Updated upstream
-
-	product_id = request.GET.getlist('id[]')
-	# product_id = str(request.GET['id'])
-=======
-<<<<<<< Updated upstream
-	product_id = str(request.GET['id'])
->>>>>>> Stashed changes
-	product_qty = request.GET['qty']
-	if 'cart_data_object' in request.session:
-		if product_id in request.session['cart_data_object']:
-			cart_data = request.session['cart_data_object']
-			cart_data[str(request.GET['id'])]['qty'] = product_qty
-			request.session['cart_data_object'] = cart_data
-=======
 	items = request.GET.getlist('items[]')
 	for item in items:
 		item_id, quantity = item.split('|')
@@ -389,7 +342,6 @@ def update_cart(request):
 	
 	cart = render_to_string('partials/cart.html', context)
 	cart_summary = render_to_string('partials/cart_summary.html', context)
->>>>>>> Stashed changes
 
 	return JsonResponse({
 		'cart': cart,

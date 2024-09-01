@@ -20,152 +20,24 @@
             </ol>
         </div><!-- End .container -->
     </nav><!-- End .breadcrumb-nav -->
-
-<<<<<<< Updated upstream
-    <div class="page-content">
-        <div class="cart">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <table class="table table-cart table-mobile">
-=======
-<<<<<<< Updated upstream
-<!-- Shoping Cart Section Begin -->
-<section class="shoping-cart spad" id="cart-list">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="shoping__product">{{ totalcartitems }} Product{{ totalcartitems|pluralize }}</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for product_id, item in cart_data.items %}
-                            <tr>
-                                <td class="shoping__cart__item">
-                                    <img src="{{ item.image }}" alt="">
-                                    <h5>{{ item.title }}</h5>
-                                </td>
-                                <td class="shoping__cart__price">
-                                    ${{ item.price|floatformat:2 }}
-                                </td>
-                                <td class="shoping__cart__quantity">
-                                    <div class="quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="{{ item.qty }}" class="product-qty-{{ product_id }}">
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="shoping__cart__total">
-                                    ${% widthratio item.price 1 item.qty %}
-                                </td>
-                                <td class="shoping__cart__item__close">
-                                    <button class="update-product" data-product="{{ product_id }}" style="border: none; background: none;"><i class="fa fa-retweet"></i></button>
-                                     &nbsp;&nbsp;&nbsp;
-                                    <button class="delete-product" data-product="{{ product_id }}" style="border: none; background: none;"><i class="fa fa-trash"></i></button>           
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__btns">
-                    <a href="{% url 'core:products-list' %}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                    <!-- <a href="#" class="primary-btn cart-btn cart-btn-right"><span class="icon_loading"></span>
-                        Upadate Cart</a> -->
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="shoping__continue">
-                    <div class="shoping__discount">
-                        <h5>Discount Codes</h5>
-                        <form action="#">
-                            <input type="text" placeholder="Enter your coupon code">
-                            <button type="submit" class="site-btn">APPLY COUPON</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="shoping__checkout">
-                    <h5>Cart Total</h5>
-                    <ul>
-                        <li>Subtotal <span>${{ cart_total_amount|floatformat:2 }}</span></li>
-                        <li>Total <span>${{ cart_total_amount|floatformat:2 }}</span></li>
-                    </ul>
-                    {% if totalcartitems %}
-                    <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Shoping Cart Section End -->
-=======
     <div class="page-content">
         <div class="cart" >
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9">
                         <table class="table table-cart table-mobile" id = "cart-table">
->>>>>>> Stashed changes
                             <thead>
                                 <tr>
                                     <th>Product</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-<<<<<<< Updated upstream
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                {% for product_id, item in cart_data.items %}
-                                <tr>
-                                    <td class="product-col">
-                                        <div class="product product-list" data-product-id="{{ product_id }}">
-                                            <figure class="product-media">
-                                                <a href="#">
-                                                    <img src="{{ item.image }}" alt="Product image">
-                                                </a>
-                                            </figure>
-
-                                            <h3 class="product-title">
-                                                <a href="#" >{{ item.title }}</a>
-                                            </h3><!-- End .product-title -->
-                                        </div><!-- End .product -->
-                                    </td>
-                                    <td class="price-col">${{ item.price|floatformat:2 }}</td>
-                                    <td class="quantity-col">
-                                        <div class="cart-product-quantity">
-                                            <input type="number" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                        </div><!-- End .cart-product-quantity -->
-                                    </td>
-                                    <td class="total-col">${% widthratio item.price 1 item.qty %}</td>
-                                    <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-                                </tr>
-                                {% endfor %}
-=======
                                     <th> </th>
                                 </tr>
                             </thead>
 
                             <tbody id="cart-list">
                                 {% include "partials/cart.html" %}
->>>>>>> Stashed changes
                             </tbody>
                         </table><!-- End .table table-wishlist -->
 
@@ -187,64 +59,7 @@
                     <aside class="col-lg-3">
                         <div class="summary summary-cart">
                             <h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
-<<<<<<< Updated upstream
-
-                            <table class="table table-summary">
-                                <tbody>
-                                    <tr class="summary-subtotal">
-                                        <td>Subtotal:</td>
-                                        <td>{{ cart_total_amount|floatformat:2 }}</td>
-                                    </tr><!-- End .summary-subtotal -->
-                                    <tr class="summary-shipping">
-                                        <td>Shipping:</td>
-                                        <td>&nbsp;</td>
-                                    </tr>
-
-                                    <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-                                                <label class="custom-control-label" for="free-shipping">Free Shipping</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$0.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
-
-                                    <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-                                                <label class="custom-control-label" for="standart-shipping">Standart:</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$10.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
-
-                                    <tr class="summary-shipping-row">
-                                        <td>
-                                            <div class="custom-control custom-radio">
-                                                <input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-                                                <label class="custom-control-label" for="express-shipping">Express:</label>
-                                            </div><!-- End .custom-control -->
-                                        </td>
-                                        <td>$20.00</td>
-                                    </tr><!-- End .summary-shipping-row -->
-
-                                    <tr class="summary-shipping-estimate">
-                                        <td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
-                                        <td>&nbsp;</td>
-                                    </tr><!-- End .summary-shipping-estimate -->
-
-                                    <tr class="summary-total">
-                                        <td>Total:</td>
-                                        <td>{{ cart_total_amount|floatformat:2 }}</td>
-                                    </tr><!-- End .summary-total -->
-                                </tbody>
-                            </table><!-- End .table table-summary -->
-
-=======
                             {% include "partials/cart_summary.html" %}
->>>>>>> Stashed changes
                             <a href="" class="btn btn-outline-dark btn-order btn-block disabled">NOT AVAILABLE</a>
                         </div><!-- End .summary -->
 
@@ -255,9 +70,5 @@
         </div><!-- End .cart -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 
 {% endblock content %}

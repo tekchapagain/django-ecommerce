@@ -250,23 +250,6 @@ def get_or_create_cart(user):
 	return cart
 
 
-# def cart_view(request):
-# 	cart_total_amount = 0
-# 	if 'cart_data_object' in request.session:
-# 		for product_id, item in request.session['cart_data_object'].items():
-# 			print(item['qty'], item['price'])
-# 			cart_total_amount += int(item['qty']) * float(item['price'])
-# 			# cart_total_amount += int('1') * 100
-
-# 		return render(request, 'core/cart.html', {
-# 			'cart_data': request.session['cart_data_object'],
-# 			'totalcartitems': len(request.session['cart_data_object']),
-# 			'cart_total_amount': cart_total_amount
-# 		})
-		
-# 	else:
-# 		return render(request, 'core/cart.html')
-	
 def cart_view(request):
 	try:
 		cart = get_or_create_cart(request.user)

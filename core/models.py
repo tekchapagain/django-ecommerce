@@ -72,12 +72,32 @@ class Vendor(models.Model):
 	def __str__(self):
 		return self.title
 
+class Brand(models.Model):
+	bid = ShortUUIDField(unique=True, length=10, max_length=30, prefix='bran', alphabet='abcdefgh12345')
+	
+	title = models.CharField(max_length=100, default="Brand Name")
+	image = models.ImageField(upload_to=user_directory_path, default="brand.jpg")
+	description = RichTextUploadingField(null=True, blank=True, default="Brand Description")
+
+	user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+	class Meta:
+		verbose_name_plural = 'Brands'
+
+	def brand_image(self):
+		return mark_safe('<img src="%s" width="50" height="50">' % (self.image.url))
+
+	def __str__(self):
+		return self.title
+	
 class Product(models.Model):
 	pid = ShortUUIDField(unique=True, length=10, max_length=30, alphabet='abcdefgh12345')
 
 	user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
 	category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="category")
 	vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True, related_name="product")
+	brand = models.ForeignKey(Brand, on_delete=models.SET_NULL, null=True, related_name="product")
 
 	title = models.CharField(max_length=100, default="Product Name")
 	image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
@@ -86,6 +106,7 @@ class Product(models.Model):
 	price = models.DecimalField(max_digits=1000, decimal_places=2, default="1.99")
 	old_price = models.DecimalField(max_digits=1000, decimal_places=2, default="2.99")
 
+	brand = models.CharField(max_length=100, null=True, blank=True)
 	specifications = RichTextUploadingField(null=True, blank=True)
 	stock_count = models.PositiveIntegerField(default=10, null=True, blank=True)
 	shipping = models.CharField(max_length=100, default="1", null=True, blank=True)

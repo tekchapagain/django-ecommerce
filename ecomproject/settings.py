@@ -18,7 +18,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False").lower() =="true"
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = ['*']
+
 
 
 #Sirv Files Storage
@@ -29,7 +30,7 @@ AWS_S3_ENDPOINT_URL =  os.environ.get("AWS_S3_ENDPOINT_URL")
 AWS_S3_CUSTOM_DOMAIN =  os.environ.get("AWS_S3_CUSTOM_DOMAIN")
 AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH")
 AWS_DEFAULT_ACL =  os.environ.get("AWS_DEFAULT_ACL")
-AWS_S3_VERIFY =  os.environ.get("AWS_S3_VERIFY")
+AWS_S3_VERIFY =  False
 
 # Application definition
 

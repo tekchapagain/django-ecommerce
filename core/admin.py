@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import Product, Category, Vendor,Cart,CartItem, CartOrder, CartOrderItems, \
+from core.models import Product, Category, Vendor,Brand,Cart,CartItem, CartOrder, CartOrderItems, \
 ProductImages, ProductReview, Wishlist, Address, ContactUs
 
 class ProductImagesAdmin(admin.TabularInline):
@@ -7,13 +7,16 @@ class ProductImagesAdmin(admin.TabularInline):
 
 class ProductAdmin(admin.ModelAdmin):
 	inlines = [ProductImagesAdmin]
-	list_display = ['user', 'title', 'product_image', 'price','category', 'vendor', 'featured', 'product_status', 'pid']
+	list_display = ['user', 'title', 'product_image', 'price','category', 'brand','featured', 'product_status', 'pid']
 
 class CategotyAdmin(admin.ModelAdmin):
 	list_display = ['title', 'category_image', 'cid']
 
 class VendorAdmin(admin.ModelAdmin):
 	list_display = ['title', 'vendor_image', 'vid']
+
+class Branddmin(admin.ModelAdmin):
+	list_display = ['title', 'brand_image', 'bid']
 
 class CartAdmin(admin.ModelAdmin):
 	list_display = ['user', 'created_at', 'updated_at']
@@ -42,6 +45,7 @@ class ContactUsAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Category, CategotyAdmin)
 admin.site.register(Vendor, VendorAdmin)
+admin.site.register(Brand, Branddmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)
 # admin.site.register(CartOrder, CartOrderAdmin)

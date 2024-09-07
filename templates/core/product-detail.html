@@ -244,8 +244,6 @@
 
                         <div class="product-action-vertical">
                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                         </div><!-- End .product-action-vertical -->
 
                         <div class="product-action">   
@@ -255,7 +253,7 @@
 
                     <div class="product-body">
                         <div class="product-cat">
-                            <a href="#">Women</a>
+                            <a href="#">{{ p.category.title }}</a>
                         </div><!-- End .product-cat -->
                         <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</h3><!-- End .product-title -->
                         <div class="product-price">
@@ -263,11 +261,11 @@
                         </div><!-- End .product-price -->
                         <div class="ratings-container">
                             <div class="ratings">
-                                <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 2 Reviews )</span>
+                                <div class="ratings-val" style="width:{{ p.average_rating|multiply:20 }}%;"></div>
+                                <span class="ratings-text">( {{p.reviews.count}} Reviews )</span>
+                            </div><!-- End .ratings -->   
                         </div><!-- End .rating-container -->
-
+<!--
                         <div class="product-nav product-nav-thumbs">
                             <a href="#" class="active">
                                 <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
@@ -279,21 +277,18 @@
                             <a href="#">
                                 <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
                             </a>
-                        </div><!-- End .product-nav -->
+                        </div>-->
                     </div><!-- End .product-body -->
                 </div><!-- End .product -->
                 {% else %}
                 <div class="product product-7 text-center">
                     <figure class="product-media">
-                        <span class="product-label label-new">-{{p.get_percentage|floatformat:0}}%</span>
                         <a href="{% url 'core:products-detail' p.pid %}">
                             <img src="{{p.image.url}}" alt="Product image" class="product-image">
                         </a>
 
                         <div class="product-action-vertical">
                             <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                         </div><!-- End .product-action-vertical -->
 
                         <div class="product-action">
@@ -303,19 +298,19 @@
 
                     <div class="product-body">
                         <div class="product-cat">
-                            <a href="#">Women</a>
+                            <a href="#">{{ p.category.title }}</a>
                         </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="product.html">Brown paperbag waist <br>pencil skirt</a></h3><!-- End .product-title -->
+                        <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</a></h3><!-- End .product-title -->
                         <div class="product-price">
                             ${{product.price}}
                         </div><!-- End .product-price -->
                         <div class="ratings-container">
                             <div class="ratings">
-                                <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( 2 Reviews )</span>
+                                <div class="ratings-val" style="width:{{ p.average_rating|multiply:20 }}%;"></div>
+                                <span class="ratings-text">( {{p.reviews.count}} Reviews )</span>
+                            </div><!-- End .ratings -->       
                         </div><!-- End .rating-container -->
-
+<!-- 
                         <div class="product-nav product-nav-thumbs">
                             <a href="#" class="active">
                                 <img src="assets/images/products/product-4-thumb.jpg" alt="product desc">
@@ -327,7 +322,7 @@
                             <a href="#">
                                 <img src="assets/images/products/product-4-3-thumb.jpg" alt="product desc">
                             </a>
-                        </div><!-- End .product-nav -->
+                        </div>-->
                     </div><!-- End .product-body -->
                 </div><!-- End .product -->
                 {% endif %}

@@ -10,6 +10,9 @@ ProductImages, ProductReview, Wishlist, Address, ContactUs
 from core.forms import ProductReviewFrom
 from taggit.models import Tag
 
+from django.views.decorators.cache import cache_page
+
+@cache_page(60 * 10) 
 def index(request):
 	featured_products = Product.objects.filter(product_status='published', featured=True).annotate(average_rating=Avg('reviews__rating'))
 	special_offers = Product.objects.filter(product_status='published').annotate(

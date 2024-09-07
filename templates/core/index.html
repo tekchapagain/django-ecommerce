@@ -224,7 +224,7 @@
                             <div class="product-cat">
                                 <a href="#">{{ p.category.title }}</a>
                             </div><!-- End .product-cat -->
-                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title}}</a></h3><!-- End .product-title -->
+                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title|truncatechars:35}}</a></h3><!-- End .product-title -->
                             <div class="product-price">
                                 {% if p.get_percentage > 0 %}
                                 <span class="new-price">${{ p.price }}</span>
@@ -267,66 +267,7 @@
         </div><!-- End .cta -->
     </div><!-- End .container -->
 
-    <div class="container">
-        <div class="heading text-center mb-3">
-            <h2 class="title">Deals & Outlet</h2><!-- End .title -->
-            <p class="title-desc">Today’s deal and more</p><!-- End .title-desc -->
-        </div><!-- End .heading -->
-
-        <div class="row">
-            <div class="col-lg-6 deal-col">
-                <div class="deal" style="background-image: url({% static './assets/images/demos/demo-4/bg-1.jpg' %});">
-                    <div class="deal-top">
-                        <h2>Deal of the Day.</h2>
-                        <h4>Limited quantities. </h4>
-                    </div><!-- End .deal-top -->
-
-                    <div class="deal-content">
-                        <h3 class="product-title"><a href="product.html">Home Smart Speaker with  Google Assistant</a></h3><!-- End .product-title -->
-
-                        <div class="product-price">
-                            <span class="new-price">$129.00</span>
-                            <span class="old-price">Was $150.99</span>
-                        </div><!-- End .product-price -->
-
-                        <a href="product.html" class="btn btn-link"><span>Shop Now</span><i class="icon-long-arrow-right"></i></a>
-                    </div><!-- End .deal-content -->
-
-                    <div class="deal-bottom">
-                        <div class="deal-countdown daily-deal-countdown" data-until="+10h"></div><!-- End .deal-countdown -->
-                    </div><!-- End .deal-bottom -->
-                </div><!-- End .deal -->
-            </div><!-- End .col-lg-6 -->
-
-            <div class="col-lg-6 deal-col">
-                <div class="deal" style="background-image: url({% static './assets/images/demos/demo-4/deal/bg-2.jpg' %} );">
-                    <div class="deal-top">
-                        <h2>Your Exclusive Offers.</h2>
-                        <h4>Sign in to see amazing deals.</h4>
-                    </div><!-- End .deal-top -->
-
-                    <div class="deal-content">
-                        <h3 class="product-title"><a href="product.html">Certified Wireless Charging  Pad for iPhone / Android</a></h3><!-- End .product-title -->
-
-                        <div class="product-price">
-                            <span class="new-price">$29.99</span>
-                        </div><!-- End .product-price -->
-
-                        <a href="login.html" class="btn btn-link"><span>Sign In and Save money</span><i class="icon-long-arrow-right"></i></a>
-                    </div><!-- End .deal-content -->
-
-                    <div class="deal-bottom">
-                        <div class="deal-countdown offer-countdown" data-until="+11d"></div><!-- End .deal-countdown -->
-                    </div><!-- End .deal-bottom -->
-                </div><!-- End .deal -->
-            </div><!-- End .col-lg-6 -->
-        </div><!-- End .row -->
-
-        <div class="more-container text-center mt-1 mb-5">
-            <a href="#" class="btn btn-outline-dark-2 btn-round btn-more"><span>Shop more Outlet deals</span><i class="icon-long-arrow-right"></i></a>
-        </div><!-- End .more-container -->
-    </div><!-- End .container -->
-
+<!--
     <div class="container">
         <hr class="mb-0">
         <div class="owl-carousel mt-5 mb-5 owl-simple" data-toggle="owl" 
@@ -376,8 +317,8 @@
             <a href="#" class="brand">
                 <img src="{% static './assets/images/brands/6.png' %}" alt="Brand Name">
             </a>
-        </div><!-- End .owl-carousel -->
-    </div><!-- End .container -->
+        </div>
+    </div> End .container -->
 
     <div class="bg-light pt-5 pb-6">
         <div class="container trending-products">
@@ -459,9 +400,9 @@
 
                                     <div class="product-body">
                                         <div class="product-cat">
-                                            <a href="#">Headphones</a>
+                                            <a href="#">{{ p.category.title }}</a>
                                         </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{ p.title }}</a></h3><!-- End .product-title -->
+                                        <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title|truncatechars:35}}</a></h3><!-- End .product-title -->
                                         <div class="product-price">
                                             {{ p.price }}
                                         </div><!-- End .product-price -->
@@ -504,7 +445,7 @@
                                         <div class="product-cat">
                                             <a href="#">Video Games</a>
                                         </div><!-- End .product-cat -->
-                                        <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{ p.title }}</a></h3><!-- End .product-title -->
+                                        <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title|truncatechars:35}}</a></h3><!-- End .product-title -->
                                         <div class="product-price">
                                             $279.99
                                         </div><!-- End .product-price -->
@@ -542,8 +483,8 @@
         <div class="products">
             
             <div class="row justify-content-center">
-                {% for p in oldest_products|slice:":8" %}
-                <div class="col-6 col-md-4 col-lg-3">
+                {% for p in oldest_products|slice:":10" %}
+                <div class="col-10 col-md-4 col-lg-3">
                     <div class="product product-2">
                         <figure class="product-media">
                             <span class="product-label label-circle label-top">Top</span>
@@ -565,9 +506,9 @@
 
                         <div class="product-body">
                             <div class="product-cat">
-                                <a href="#">Headphones</a>
+                                <a href="#">{{ p.category.title }}</a>
                             </div><!-- End .product-cat -->
-                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{ p.title }}</a></h3><!-- End .product-title -->
+                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title|truncatechars:35}}</a></h3><!-- End .product-title -->
                             <div class="product-price">
                                 {{ p.price }}
                             </div><!-- End .product-price -->
@@ -577,12 +518,6 @@
                                 </div><!-- End .ratings -->
                                 <span class="ratings-text">( 4 Reviews )</span>
                             </div><!-- End .rating-container -->
-
-                            <div class="product-nav product-nav-dots">
-                                <a href="#" style="background: #69b4ff;"><span class="sr-only">Color name</span></a>
-                                <a href="#" style="background: #ff887f;"><span class="sr-only">Color name</span></a>
-                                <a href="#" class="active" style="background: #333333;"><span class="sr-only">Color name</span></a>
-                            </div><!-- End .product-nav -->
                         </div><!-- End .product-body -->
                     </div><!-- End .product -->
                 </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->

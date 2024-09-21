@@ -11,14 +11,11 @@ def core_context(request):
 	vendors = Vendor.objects.all()
 
 	min_max_price = Product.objects.aggregate(Min('price'), Max('price'))
-
-	latest_products = Product.objects.filter(product_status='published')\
-        .prefetch_related('category')\
-        .annotate(
+	latest_products = Product.objects.filter(product_status='published').prefetch_related('category')\
+       .annotate(
         average_rating=Avg('reviews__rating'),
-        count=Count('reviews')  # Add this line to count reviews
-    )\
-        .order_by('-date')[:10]
+        review_count=Count('reviews')  # Count reviews
+        ).order_by('-date')[:10]
 
 	try:
 		wishlist = Wishlist.objects.filter(user=request.user)

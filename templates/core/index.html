@@ -1,6 +1,7 @@
 
 {% extends 'partials/base.html' %}
 {% load static %}
+{% load cache %}
 {% load multiply %}
 {% block title %}Niceclickllc | Homepage{% endblock title %}
 
@@ -375,6 +376,7 @@
                                         }
                                     }
                                 }'>
+                                
                                 {% for p in featured_products %}
                                 {% if p.get_percentage > 0 %}
                                 <div class="product product-2">

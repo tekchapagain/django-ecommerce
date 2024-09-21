@@ -12,24 +12,29 @@ from taggit.models import Tag
 
 from django.views.decorators.cache import cache_page
 
-@cache_page(60 * 10) 
+@cache_page(60 * 10)  # Cache page for 10 minutes
 def index(request):
-	featured_products = Product.objects.filter(product_status='published', featured=True).annotate(average_rating=Avg('reviews__rating'))
-	special_offers = Product.objects.filter(product_status='published').annotate(
-		discount_percentage=ExpressionWrapper(
-			((F('old_price') - F('price')) / F('old_price')) * 100,
-			output_field=DecimalField()
-		)
-    ).order_by('-discount_percentage')[:9]
+    # Combine related queries to reduce DB hits
+    featured_products = Product.objects.filter(product_status='published', featured=True)\
+        .annotate(average_rating=Avg('reviews__rating'))
     
-	oldest_products = Product.objects.filter(product_status='published').order_by('date')
+    special_offers = Product.objects.filter(product_status='published')\
+        .annotate(
+            discount_percentage=ExpressionWrapper(
+                ((F('old_price') - F('price')) / F('old_price')) * 100,
+                output_field=DecimalField()
+            )
+        ).order_by('-discount_percentage')[:9]
+    
+    oldest_products = Product.objects.filter(product_status='published').order_by('date')[:9]
 
-	context = {
-		"featured_products": featured_products,
-		"special_offers": special_offers,
-		"oldest_products": oldest_products,
-	}
-	return render(request, 'core/index.html', context)
+    context = {
+        "featured_products": featured_products,
+        "special_offers": special_offers,
+        "oldest_products": oldest_products,
+    }
+    
+    return render(request, 'core/index.html', context)
 
 def products_list_view(request):
 	products = Product.objects.filter(product_status='published')

@@ -1,13 +1,13 @@
 import random
 from core.models import Product, Category, Vendor,Cart,CartItem, CartOrder, \
 CartOrderItems, ProductImages, ProductReview, Wishlist, Address
-from blog.models import Post
 from django.db.models import Min, Max,Avg,Count
 from django.contrib import messages
 from taggit.models import Tag
 
+
 def core_context(request):
-	categories = Category.objects.all()
+	categories = Category.objects.annotate(product_count=Count('category'))
 	vendors = Vendor.objects.all()
 
 	min_max_price = Product.objects.aggregate(Min('price'), Max('price'))
@@ -16,7 +16,7 @@ def core_context(request):
         .prefetch_related('category')\
         .annotate(
         average_rating=Avg('reviews__rating'),
-        review_count=Count('reviews')  # Add this line to count reviews
+        count=Count('reviews')  # Add this line to count reviews
     )\
         .order_by('-date')[:10]
 
@@ -27,8 +27,6 @@ def core_context(request):
 
 	all_product_tags = Tag.objects.filter(product__isnull=False).distinct()
 	random_product_tags = random.sample(list(all_product_tags), min(6, len(all_product_tags)))
-
-	blog_posts = Post.objects.filter(post_status='published').order_by("-date_created")
 
 	# try:
 	# 	address = Address.objects.get(user=request.user)
@@ -50,5 +48,4 @@ def core_context(request):
 		'cart_item': cart_item,
 		'latest_products': latest_products,
 		'random_product_tags': random_product_tags,
-		'blog_posts': blog_posts,
 	}

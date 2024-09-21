@@ -49,6 +49,7 @@ def products_list_view(request):
 	page_number = request.GET.get('page',1)
 	min_price = request.GET.get('min_price')
 	max_price = request.GET.get('max_price')
+	
 	if min_price or max_price:
 		products = products.filter(price__gte=min_price)
 		products = products.filter(price__lte=max_price)
@@ -123,13 +124,13 @@ def product_detail_view(request, pid):
     product = cache.get(cache_key)
     
     if not product:
-        product = Product.objects.select_related('category').get(pid=pid)
+        product = Product.objects.select_related('category').prefetch_related('tags').get(pid=pid)
         cache.set(cache_key, product, 600)  # Cache for 10 minutes
 
     # Cache similar products based on category
     products_cache_key = f"similar_products_{product.category.id}"
     products = cache.get(products_cache_key)
-    
+    tags = product.tags.all()
     if not products:
         products = Product.objects.filter(category=product.category).exclude(pid=pid).select_related('category')
         cache.set(products_cache_key, products, 600)  # Cache for 10 minutes
@@ -156,6 +157,7 @@ def product_detail_view(request, pid):
         'average_rating': average_rating,
         'review_form': review_form,
         'make_review': make_review,
+		'tags': tags,
     }
     return render(request, 'core/product-detail.html', context)
 

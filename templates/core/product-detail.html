@@ -87,10 +87,14 @@
 
                             <div class="product-details-footer">
                                 <div class="product-cat">
-                                    {% if product.tags.all %}
+                                    {% if tags %}
                                     <span>Tags:</span>
-                                    <span>{% for tag in product.tags.all %}<a href="{% url 'core:tags' tag.slug %}" class="tag">#{{tag.name}}</a> {% endfor %}</span>
-                                    {% endif %}
+                                    <span>
+                                        {% for tag in tags %}
+                                            <a href="{% url 'core:tags' tag.slug %}" class="tag">#{{ tag.name }}</a>
+                                        {% endfor %}
+                                    </span>
+                                {% endif %}
                                 </div><!-- End .product-cat -->
 
                                 <div class="social-icons social-icons-sm">

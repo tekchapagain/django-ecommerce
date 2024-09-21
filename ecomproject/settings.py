@@ -32,6 +32,10 @@ AWS_QUERYSTRING_AUTH = os.environ.get("AWS_QUERYSTRING_AUTH")
 AWS_DEFAULT_ACL =  os.environ.get("AWS_DEFAULT_ACL")
 AWS_S3_VERIFY =  False
 
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=86400',  # Cache files for 1 day (86400 seconds)
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,7 +56,7 @@ INSTALLED_APPS = [
     
 
     # Custom Apps
-    'blog',
+    # 'blog',
     'core',
     'userauths',
 ]
@@ -80,7 +84,6 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'core.context_processor.core_context',
-                'blog.context_processor.blog_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

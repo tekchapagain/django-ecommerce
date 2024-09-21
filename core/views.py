@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.db.models import Avg, F, ExpressionWrapper, DecimalField
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -10,7 +9,12 @@ ProductImages, ProductReview, Wishlist, Address, ContactUs
 from core.forms import ProductReviewFrom
 from taggit.models import Tag
 
+from django.db.models import Prefetch,Avg, F, ExpressionWrapper, DecimalField
+from django.db.models.functions import Coalesce
+
+from django.core.cache import cache
 from django.views.decorators.cache import cache_page
+
 
 @cache_page(60 * 10)  # Cache page for 10 minutes
 def index(request):
@@ -26,7 +30,9 @@ def index(request):
             )
         ).order_by('-discount_percentage')[:9]
     
-    oldest_products = Product.objects.filter(product_status='published').order_by('date')[:9]
+    oldest_products = Product.objects.filter(product_status='published')\
+    .prefetch_related('category')\
+    .order_by('date')[:10]
 
     context = {
         "featured_products": featured_products,
@@ -113,32 +119,45 @@ def vendor_detail_view(request, vid):
 	return render(request, 'core/vendor-detail.html', context)
 
 def product_detail_view(request, pid):
-	product = Product.objects.get(pid=pid)
-	# product = get_object_or_404(Product, pid=pid)
-	products = Product.objects.filter(category=product.category).exclude(pid=pid)
-	p_image = product.p_images.all()
+    cache_key = f"product_{pid}"
+    product = cache.get(cache_key)
+    
+    if not product:
+        product = Product.objects.select_related('category').get(pid=pid)
+        cache.set(cache_key, product, 600)  # Cache for 10 minutes
 
-	reviews = ProductReview.objects.filter(product=product).order_by('-date')
-	average_rating = ProductReview.objects.filter(product=product).aggregate(rating=Avg('rating'))
-	review_form = ProductReviewFrom()
+    # Cache similar products based on category
+    products_cache_key = f"similar_products_{product.category.id}"
+    products = cache.get(products_cache_key)
+    
+    if not products:
+        products = Product.objects.filter(category=product.category).exclude(pid=pid).select_related('category')
+        cache.set(products_cache_key, products, 600)  # Cache for 10 minutes
+    
+    product = Product.objects.prefetch_related('p_images').get(pid=pid)
+    p_image = product.p_images.all()
 
-	make_review = True
-	if request.user.is_authenticated:
-		user_review_count = ProductReview.objects.filter(user=request.user, product=product).count() 
+    reviews = ProductReview.objects.filter(product=product).order_by('-date').select_related('user')
+    average_rating = ProductReview.objects.filter(product=product).aggregate(rating=Avg('rating'))
 
-		if user_review_count > 0:
-			make_review = False
+    review_form = ProductReviewFrom()
 
-	context = {
-		'product': product,
-		'p_image': p_image,
-		'products': products,
-		'reviews': reviews,
-		'average_rating': average_rating,
-		'review_form': review_form,
-		'make_review': make_review,
-	}
-	return render(request, 'core/product-detail.html', context)
+    make_review = True
+    if request.user.is_authenticated:
+        user_review_exists = ProductReview.objects.filter(user=request.user, product=product).exists()
+        if user_review_exists:
+            make_review = False
+
+    context = {
+        'product': product,
+        'p_image': p_image,
+        'products': products,
+        'reviews': reviews,
+        'average_rating': average_rating,
+        'review_form': review_form,
+        'make_review': make_review,
+    }
+    return render(request, 'core/product-detail.html', context)
 
 def tags_list(request, tag_slug=None):
 	products = Product.objects.filter(product_status='published').order_by('-id')

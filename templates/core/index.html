@@ -376,7 +376,7 @@
                                         }
                                     }
                                 }'>
-                                
+                                {% cache 600 featured_products_list %}
                                 {% for p in featured_products %}
                                 {% if p.get_percentage > 0 %}
                                 <div class="product product-2">
@@ -461,6 +461,7 @@
                                 </div><!-- End .product -->
                                 {% endif %}
                                 {% endfor %}
+                                {% endcache %}
                             </div><!-- End .owl-carousel -->
 
                     </div><!-- End .tab-content -->

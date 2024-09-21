@@ -16,7 +16,7 @@ from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 
 
-# @cache_page(60 * 10)  # Cache page for 10 minutes
+@cache_page(60 * 10)  # Cache page for 10 minutes
 def index(request):
     # Combine related queries to reduce DB hits
     featured_products = Product.objects.filter(product_status='published', featured=True)\

@@ -16,76 +16,91 @@ from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 
 
-@cache_page(60 * 10)  # Cache page for 10 minutes
 def index(request):
-    # Combine related queries to reduce DB hits
-    featured_products = Product.objects.filter(product_status='published', featured=True)\
-        .annotate(average_rating=Avg('reviews__rating'))
-    
-    special_offers = Product.objects.filter(product_status='published')\
-        .annotate(
-            discount_percentage=ExpressionWrapper(
-                ((F('old_price') - F('price')) / F('old_price')) * 100,
-                output_field=DecimalField()
-            )
-        ).order_by('-discount_percentage')[:9]
-    
-    oldest_products = Product.objects.filter(product_status='published')\
-    .prefetch_related('category')\
-    .order_by('date')[:10]
+    # Cache the featured products, special offers, and oldest products
+    featured_products = cache.get('featured_products')
+    if not featured_products:
+        featured_products = Product.objects.filter(product_status='published', featured=True)\
+            .annotate(average_rating=Avg('reviews__rating'))
+        cache.set('featured_products', featured_products, 60 * 10)  # Cache for 10 minutes
+
+    special_offers = cache.get('special_offers')
+    if not special_offers:
+        special_offers = Product.objects.filter(product_status='published')\
+            .annotate(
+                discount_percentage=ExpressionWrapper(
+                    (F('old_price') - F('price')) / F('old_price') * 100,
+                    output_field=DecimalField()
+                )
+            ).order_by('-discount_percentage')[:9]
+        cache.set('special_offers', special_offers, 60 * 10)
+
+    oldest_products = cache.get('oldest_products')
+    if not oldest_products:
+        oldest_products = Product.objects.filter(product_status='published')\
+            .prefetch_related('category')\
+            .order_by('date')[:10]
+        cache.set('oldest_products', oldest_products, 60 * 10)
 
     context = {
         "featured_products": featured_products,
         "special_offers": special_offers,
         "oldest_products": oldest_products,
+        "username": request.user.username if request.user.is_authenticated else None,
     }
     
     return render(request, 'core/index.html', context)
 
 def products_list_view(request):
-	products = Product.objects.filter(product_status='published')
-	categories = request.GET.getlist('category[]')
-	vendors = request.GET.getlist('vendor[]')
-	page_number = request.GET.get('page',1)
-	min_price = request.GET.get('min_price')
-	max_price = request.GET.get('max_price')
-	
-	if min_price or max_price:
-		products = products.filter(price__gte=min_price)
-		products = products.filter(price__lte=max_price)
+    products = Product.objects.filter(product_status='published')
 
-	if categories:
-		products = products.filter(category__id__in=categories).distinct()
-	if len(vendors) > 0:
-		products = products.filter(vendor__id__in=vendors).distinct()
-	
-	paginator = Paginator(products, per_page=5)
+    # Fetch filters from request
+    categories = request.GET.getlist('category[]')
+    vendors = request.GET.getlist('vendor[]')
+    page_number = request.GET.get('page', 1)
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
 
-	try:
-		page_object = paginator.get_page(page_number)
-	except PageNotAnInteger:
-		page_object = paginator.get_page(1)
-	except EmptyPage:
-        # If page is out of range deliver last page of results
-		page_object = paginator.get_page(paginator.num_pages)
+    # Apply price filters if provided
+    if min_price:
+        products = products.filter(price__gte=min_price)
+    if max_price:
+        products = products.filter(price__lte=max_price)
 
-	context = {
-		'page_object': page_object,
-		'category' : categories
-	}
+    # Apply category and vendor filters
+    if categories:
+        products = products.filter(category__id__in=categories).distinct()
+    if vendors:
+        products = products.filter(vendor__id__in=vendors).distinct()
 
-	if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-		toolbox = render_to_string('partials/toolbox.html', context)
-		product_list = render_to_string('partials/product-list.html', context)
-		pagination = render_to_string('partials/pagination.html', context)
+    # Paginate the filtered products
+    paginator = Paginator(products, per_page=5)
 
-		return JsonResponse({
-			'toolbox': toolbox,
-			'html': product_list,
-			'pagination':pagination
-			})
-	
-	return render(request, 'core/product-list.html', context)
+    try:
+        page_object = paginator.get_page(page_number)
+    except PageNotAnInteger:
+        page_object = paginator.get_page(1)
+    except EmptyPage:
+        page_object = paginator.get_page(paginator.num_pages)
+
+    context = {
+        'page_object': page_object,
+        'category': categories
+    }
+
+    # Check for AJAX request
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        toolbox = render_to_string('partials/toolbox.html', context)
+        product_list = render_to_string('partials/product-list.html', context)
+        pagination = render_to_string('partials/pagination.html', context)
+
+        return JsonResponse({
+            'toolbox': toolbox,
+            'html': product_list,
+            'pagination': pagination
+        })
+    
+    return render(request, 'core/product-list.html', context)
 
 def category_list_view(request):
 	categories = Category.objects.all()

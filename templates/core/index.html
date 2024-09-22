@@ -216,7 +216,7 @@
                             </div><!-- End .product-action -->
 
                             <div class="product-action">
-                                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                <a href="{% url 'core:add-to-cart' %}" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
                                 <!-- <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> -->
                             </div><!-- End .product-action -->
                         </figure><!-- End .product-media -->
@@ -395,7 +395,7 @@
                                         </div><!-- End .product-action -->
 
                                         <div class="product-action">
-                                            <a href="#" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>
+                                            <a href="{% url 'core:add-to-cart' %}" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>
                                             <!-- <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> -->
                                         </div><!-- End .product-action -->
                                     </figure><!-- End .product-media -->
@@ -486,32 +486,33 @@
         <div class="products">
             
             <div class="row justify-content-center">
-                {% for p in oldest_products|slice:":10" %}
-                <div class="col-10 col-md-4 col-lg-3">
+                {% for p in oldest_products|slice:":8" %}
+                <div class="col-10 col-md-4 col-lg-3"> <!-- Change col-lg-3 to col-lg-2 -->
                     <div class="product product-2">
                         <figure class="product-media">
                             <span class="product-label label-circle label-top">Top</span>
                             <a href="{% url 'core:products-detail' p.pid %}">
                                 <img src="{{ p.image.url }}" alt="Product image" class="product-image">
                             </a>
-
+            
                             <div class="product-action-vertical">
                                 {% if request.user.is_authenticated %}
-                                <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ p.id }}" ><span>Add to Wishlist</span></a>
+                                <a class="btn-product btn-wishlist add-to-wishlist" data-product-item="{{ p.id }}"><span>Add to Wishlist</span></a>
                                 {% else %}
-                                <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></span></a>
+                                <a href="{% url 'userauths:sign-in' %}" class="btn-product btn-wishlist add-to-wishlist"><span>Add to Wishlist</span></a>
                                 {% endif %}
                             </div><!-- End .product-action -->
-
+            
                             <div class="product-action">
-                                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>                            </div><!-- End .product-action -->
+                                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>Add to cart</span></a>
+                            </div><!-- End .product-action -->
                         </figure><!-- End .product-media -->
-
+            
                         <div class="product-body">
                             <div class="product-cat">
                                 <a href="#">{{ p.category.title }}</a>
                             </div><!-- End .product-cat -->
-                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{p.title|truncatechars:35}}</a></h3><!-- End .product-title -->
+                            <h3 class="product-title"><a href="{% url 'core:products-detail' p.pid %}">{{ p.title|truncatechars:35 }}</a></h3><!-- End .product-title -->
                             <div class="product-price">
                                 {{ p.price }}
                             </div><!-- End .product-price -->
@@ -523,9 +524,10 @@
                             </div><!-- End .rating-container -->
                         </div><!-- End .product-body -->
                     </div><!-- End .product -->
-                </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+                </div><!-- End .col-sm-6 col-md-4 col-lg-2 --> <!-- Updated here -->
                 {% endfor %}
             </div><!-- End .row -->
+            
         </div><!-- End .products -->
     </div><!-- End .container -->
 

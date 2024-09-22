@@ -18,8 +18,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG","False").lower() =="true"
 
-# ALLOWED_HOSTS = ['.vercel.app', '.now.sh','.com.np']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.vercel.app', '.now.sh','niceclickllc.com']
+# ALLOWED_HOSTS = ['*']
 
 
 #Sirv Files Storage
@@ -109,6 +109,12 @@ database_url = os.environ.get("DATABASE_URL")
 DATABASES["default"] = dj_database_url.parse(database_url)
 
 CACHES = {
+
+    'local': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    },
+
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': os.environ.get("REDIS_URL"),
